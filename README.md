@@ -74,4 +74,4 @@ Welcome to the **Simple Chat Application**! This app is built using **Vue.js 3**
 </div>
 
 
-```
+

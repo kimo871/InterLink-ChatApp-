@@ -1,0 +1,9 @@
+@mixin perfect-center{
+    display:flex;
+    justify-content:center;
+    align-items:center;
+   }
+
+@mixin horizon-center{
+    margin : 0 auto;
+   }
