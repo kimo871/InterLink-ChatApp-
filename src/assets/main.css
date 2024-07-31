@@ -25,6 +25,17 @@ a{
   padding: 3px;
 }
 
+.feedback{
+ 
+  color:white;
+  padding:9px 12px;
+  border-radius:6px;
+  margin:5px 0px;
+  transition:0.4 ease-in-out;
+  opacity:1;
+  
+}
+
 
 @media (hover: hover) {
  

@@ -1,10 +1,57 @@
 <script setup>
 import logo from './logo.svg';
-import {ref ,onMounted} from "vue"
+import {ref ,inject} from "vue"
 import { RouterLink } from 'vue-router';
 import Form from '../components/Form.vue'
+import { validatorMap } from '@/Validators';
 let email = ref(null);
-console.log(email.value)
+
+
+let store = inject("storeProvider",{})
+
+
+
+
+const handleSubmit=(e)=>{
+  console.log("kimo");
+  store.clearFeedback();
+  let formData = new FormData(e.target);
+
+  let data = Object.fromEntries(formData.entries());
+
+  console.log(data)
+
+  for(let entry of Object.entries(data)){
+    console.log(entry)
+    switch(entry[0]){
+      case "email":{
+        if(!validatorMap.email.validator(entry[1])) store.state.feedback={status:400,msg:validatorMap.email.error}
+        break;
+      }
+      case "password":{
+        if(!validatorMap.password.validator(entry[1])) store.state.feedback={status:400,msg:validatorMap.password.error}
+        break;
+      }
+    }
+  }
+
+  if(store.state.feedback.status===null){
+    store.logIn(data).then((res)=>{
+      console.log(res)
+      store.state.feedback={
+        status:200,
+        msg:"Logged In"
+      }
+    })
+      .catch((err)=>{
+        console.log(err)
+        store.state.feedback ={
+         status:400,
+         msg:err.message
+      }
+    })
+  }
+}
 
 </script>
 
@@ -17,7 +64,7 @@ console.log(email.value)
         <p class="slogan">Sign in to continue to Interlink.</p>
     </div>
  
- <Form>
+ <Form :handleSubmit="handleSubmit"  >
     <div class="field-wrapper">
       <label for="email">Username </label>
       <div class="input-wrapper">

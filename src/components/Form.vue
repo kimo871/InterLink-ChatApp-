@@ -1,10 +1,25 @@
 <script setup>
+import{inject} from 'vue'
+defineProps({
+    handleSubmit:{
+        type:Function,
+        required:true
+    },
+    
+})
 
+let store = inject("storeProvider",{})
 </script>
 
 <template >
 <div class="form_container">
-    <form class="form" method="post">
+    <form @submit.prevent="handleSubmit" class="form" method="post">
+    <div :style="{ 
+    background: store.state.feedback.status === 200 ? 'green' : 'red',
+    display: store.state.feedback.status==null ? 'none' : 'block' 
+  }" class="feedback">
+    {{ store.state.feedback.msg}}
+  </div>
         <slot>
 
         </slot>
