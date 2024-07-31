@@ -24,7 +24,6 @@
     "eslint": "^8.57.0",
     "eslint-plugin-vue": "^9.23.0",
     "jsdom": "^24.1.0",
-    "node-sass": "^9.0.0",
     "prettier": "^3.2.5",
     "pug": "^3.0.3",
     "pug-loader": "^1.0.2",

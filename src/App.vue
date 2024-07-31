@@ -1,36 +1,30 @@
 <script setup>
 import { RouterLink, RouterView } from 'vue-router'
+import DashBoard from './components/DashBoard.vue'
 </script>
 
 <template lang="pug">
-header 
- div.wrapper 
-   h1 Starter of The Project !
-
+DashBoard
 </template>
 
-<style  lang="scss">
-
-@mixin perfect-center{
- display:flex;
- justify-content:center;
- align-items:center;
+<style lang="scss">
+@mixin perfect-center {
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
 
 header {
-  width:100%;
+  width: 100%;
   line-height: 1.5;
   max-height: 100vh;
-  .wrapper{
+  .wrapper {
     @include perfect-center;
-
   }
-
 }
 
 .logo {
   display: block;
   margin: 0 auto 2rem;
 }
-
 </style>
