@@ -1,7 +1,7 @@
 <script setup>
-import NavBar from './NavBar.vue'
-import SideBar from './SideBar.vue'
-import ChatRoom from './ChatRoom.vue'
+import NavBar from '../components/NavBar.vue'
+import SideBar from '../components/SideBar.vue'
+import ChatRoom from '../components/ChatRoom.vue'
 </script>
 
 <template lang="pug">

@@ -1,15 +1,24 @@
 <script setup>
-import { defineProps } from 'vue'
-const { title, avatar, isActive, lastMsg } = defineProps({
+import { defineProps, defineEmits } from 'vue'
+
+const props = defineProps({
   title: String,
-  avatar: String,
-  isActive: Boolean,
-  lastMsg: String
+  icon: String,
+  lastMsg: String,
+  index: Number,
+  isActive: Boolean
 })
+
+const emit = defineEmits(['activate'])
+
+const handleClick = () => {
+  emit('activate', props.index)
+}
 </script>
+
 <template lang="pug">
-div.chatcard(:class="{ active: isActive }")
-    img(:src="avatar")
+div.chatcard(:class="{ active: isActive }" @click="handleClick")
+    img(:src="icon")
     .chatcard-info
         h1.contact-name {{ title }}
         p.contact-message {{ lastMsg }}
@@ -24,23 +33,24 @@ div.chatcard(:class="{ active: isActive }")
   padding: 10px;
   background-color: #303841;
   border-radius: 5px;
+  cursor: pointer;
+  img {
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+  }
+  .chatcard-info {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: start;
+    gap: 5px;
+  }
+  .contact-name {
+    color: white;
+  }
 }
 .active {
-  background-color: rgb(54, 64, 74);
-}
-img {
-  width: 50px;
-  height: 50px;
-  border-radius: 50%;
-}
-.chatcard-info {
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: start;
-  gap: 5px;
-}
-.contact-name {
-  color: white;
+  background-color: #0b0b0b71;
 }
 </style>

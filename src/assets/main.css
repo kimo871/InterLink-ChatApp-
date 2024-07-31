@@ -16,12 +16,6 @@ a,
   padding: 3px;
 }
 
-@media (hover: hover) {
-  a:hover {
-    background-color: hsla(160, 100%, 37%, 0.2);
-  }
-}
-
 @media (min-width: 1024px) {
   body {
     display: flex;
@@ -40,4 +34,17 @@ a,
   color: white;
   overflow-x: hidden;
   text-overflow: ellipsis;
+}
+.scrollable {
+  overflow-y: scroll;
+  height: 100%;
+}
+.scrollable::-webkit-scrollbar {
+  width: 8px;
+}
+.scrollable::-webkit-scrollbar-thumb {
+  border-radius: 6px;
+}
+.scrollable::-webkit-scrollbar-thumb:hover {
+  background: #555;
 }

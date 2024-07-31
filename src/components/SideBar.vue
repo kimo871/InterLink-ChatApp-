@@ -19,7 +19,7 @@ div.sidebar
   align-items: center;
   flex-direction: column;
   gap: 10px;
-  padding: 10px;
+  padding: 15px;
   h1 {
     color: white;
   }

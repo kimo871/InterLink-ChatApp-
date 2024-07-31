@@ -12,10 +12,12 @@ let me = 'Adel Shakal'
 </script>
 <template lang="pug">
 div.message(:class="{ 'usr-msg': sender !== me.toString() }")
+    div.message-sender
+      p {{ sender }}
     div.message-content
-        p {{ message }}
+      p {{ message }}
     div.message-status
-        p {{ time }}
+      p {{ time }}
 </template>
 <style lang="scss" scoped>
 .message {
@@ -24,11 +26,11 @@ div.message(:class="{ 'usr-msg': sender !== me.toString() }")
   justify-content: start;
   align-items: center;
   background-color: #7269ef;
-
   flex-direction: column;
   width: fit-content;
   min-width: 120px;
   padding: 5px;
+  border-radius: 5px;
   position: relative;
   &::before {
     border-bottom: 5px solid transparent;
@@ -37,7 +39,7 @@ div.message(:class="{ 'usr-msg': sender !== me.toString() }")
     border-right: 5px solid transparent;
     border-top: 5px solid #7269ef;
     border-top-color: #7269ef;
-    bottom: -10px;
+    bottom: -7px;
     content: '';
     left: 0px;
     width: 10px;
@@ -52,6 +54,16 @@ div.message(:class="{ 'usr-msg': sender !== me.toString() }")
       color: #f0f0f0;
     }
   }
+  .message-sender {
+    width: 100%;
+    display: flex;
+    justify-content: start;
+    padding: 5px;
+    p {
+      color: #283157;
+      font-weight: bold;
+    }
+  }
   .message-status {
     width: 100%;
     display: flex;
@@ -63,7 +75,6 @@ div.message(:class="{ 'usr-msg': sender !== me.toString() }")
 }
 .usr-msg {
   background-color: #303841;
-
   color: white;
   align-self: end;
   &::before {
@@ -73,13 +84,16 @@ div.message(:class="{ 'usr-msg': sender !== me.toString() }")
     border-left: 5px solid transparent;
     border-right: 5px solid #303841;
     border-top: 5px solid #303841;
-    bottom: -10px;
+    bottom: -7px;
     content: '';
     right: 0px;
     left: auto;
     width: 10px;
     height: 10px;
     position: absolute;
+  }
+  .message-sender {
+    display: none;
   }
 }
 </style>

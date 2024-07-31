@@ -22,7 +22,4 @@ div.chat-header
     margin-right: 10px;
   }
 }
-.contact-name {
-  cursor: pointer;
-}
 </style>

@@ -53,7 +53,7 @@ let messages = [
 let me = 'Adel Shakal'
 </script>
 <template lang="pug">
-.chat-body
+.chat-body.scrollable
     Message(v-for="message in messages" :key="message.time" v-bind="message" :class="{ 'message': message.sender === this.me }")
 </template>
 <style lang="scss">
