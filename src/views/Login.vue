@@ -42,12 +42,10 @@ const handleSubmit=(e)=>{
         status:200,
         msg:"Logged In"
       }
-    })
-      .catch((err)=>{
-        console.log(err)
-        store.state.feedback ={
-         status:400,
-         msg:err.message
+    }).catch((err)=>{
+      store.state.feedback={
+        status:400,
+        msg:"Invalid Credentials !"
       }
     })
   }

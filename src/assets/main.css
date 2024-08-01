@@ -25,16 +25,7 @@ a{
   padding: 3px;
 }
 
-.feedback{
- 
-  color:white;
-  padding:9px 12px;
-  border-radius:6px;
-  margin:5px 0px;
-  transition:0.4 ease-in-out;
-  opacity:1;
-  
-}
+
 
 
 @media (hover: hover) {
@@ -49,9 +40,7 @@ a{
 
  
 
-  #app h1{
-    font-size:40px;
-  }
+  
 
   #app h2{
     font-size:28px;
@@ -74,4 +63,23 @@ a{
     line-height: 1.5;
     min-height: 92vh;
   }
+}
+
+
+a{
+  text-decoration: none;
+  color: var(--color-primary);
+  transition: 0.4s;
+  padding: 3px;
+}
+
+.feedback{
+ 
+  color:white;
+  padding:9px 12px;
+  border-radius:6px;
+  margin:5px 0px;
+  transition:0.4 ease-in-out;
+  opacity:1;
+  
 }

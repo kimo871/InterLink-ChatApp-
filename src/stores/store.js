@@ -60,15 +60,13 @@ watch(
     state.loading = true;
     const auth = getAuth(app);
     const credentials = await signInWithEmailAndPassword(auth,userData.email,userData.password);
-    return credentials;
+    return {success:true} ;
     }
     catch(err){
-      state.feedback={
-        status:400,
-        msg:"Error In login "
+      throw err;
       }
     }
-  }
+  
 
   const uploadImage = async (file) => {
     try {

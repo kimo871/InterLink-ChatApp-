@@ -48,7 +48,8 @@ let store = inject("storeProvider",{})
         width:50%;
         .field-wrapper{
             width:90%;
-            margin-bottom:10px;
+            margin-top:20px;
+            margin-bottom:20px;
             .avatar-wrapper{
                 @include perfect-center;
 
