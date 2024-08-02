@@ -8,13 +8,36 @@
   font-weight: normal;
 }
 
-a,
-.green {
-  text-decoration: none;
-  color: hsla(160, 100%, 37%, 1);
-  transition: 0.4s;
-  padding: 3px;
+
+
+#app h2{
+  font-size:28px;
 }
+
+#app p{
+  font-size:17px;
+}
+
+.feedback{
+ 
+  color:white;
+  padding:9px 12px;
+  border-radius:6px;
+  margin:5px 0px;
+  transition:0.4 ease-in-out;
+  opacity:1;
+  
+}
+
+
+
+  a{
+    text-decoration: none;
+    color: var(--color-primary);
+    transition: 0.4s;
+    padding: 3px;
+  }
+
 
 @media (min-width: 1024px) {
   body {

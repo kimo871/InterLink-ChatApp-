@@ -4,11 +4,13 @@ import ChatList from './ChatList.vue'
 const { title } = defineProps({
   title: String
 })
+
+const emits = defineEmits(["open"])
 </script>
 <template lang="pug">
 div.sidebar
     h1 {{ title }}
-    ChatList
+    ChatList(@open="()=> emits('open')")
 </template>
 <style lang="scss" scoped>
 .sidebar {

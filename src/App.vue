@@ -1,10 +1,16 @@
 <script setup>
 import { RouterLink, RouterView } from 'vue-router'
 import DashBoard from './views/DashBoard.vue'
+import { provide } from 'vue';
+import { useStore } from './stores/store';
+
+provide("storeProvider",useStore());
+
 </script>
 
 <template lang="pug">
-DashBoard
+main 
+ RouterView
 </template>
 
 <style lang="scss">
@@ -17,7 +23,7 @@ DashBoard
 header {
   width: 100%;
   line-height: 1.5;
-  max-height: 100vh;
+  min-height: 100vh;
   .wrapper {
     @include perfect-center;
   }

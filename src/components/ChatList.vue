@@ -8,47 +8,49 @@ const { title } = defineProps({
 })
 
 const chats = reactive([
-  {
-    title: 'Adel Shakal',
-    icon: 'src/assets/images.jpeg',
-    lastMsg: 'Hello there!!'
-  },
-  {
-    title: 'El Za3ama',
-    icon: 'src/assets/images.jpeg',
-    lastMsg: 'What about you?'
-  },
-  {
-    title: 'Mo Salah',
-    icon: 'src/assets/images.jpeg',
-    lastMsg: 'I am fine too'
-  },
-  {
-    title: 'batman',
-    icon: 'src/assets/images.jpeg',
-    lastMsg: 'I am fine'
-  },
-  {
-    title: 'Ana Ahmed',
-    icon: 'src/assets/images.jpeg',
-    lastMsg: 'Hello there!!'
-  },
-  {
-    title: 'El Za3ama',
-    icon: 'src/assets/images.jpeg',
-    lastMsg: 'What about you?'
-  },
-  {
-    title: 'Mo Salah',
-    icon: 'src/assets/images.jpeg',
-    lastMsg: 'I am fine too'
-  },
-  {
-    title: 'batman',
-    icon: 'src/assets/images.jpeg',
-    lastMsg: 'I am fine'
-  }
-])
+  // {
+  //   title: 'Adel Shakal',
+  //   icon: 'src/assets/images.jpeg',
+  //   lastMsg: 'Hello there!!'
+  // },
+  // {
+  //   title: 'El Za3ama',
+  //   icon: 'src/assets/images.jpeg',
+  //   lastMsg: 'What about you?'
+  // },
+  // {
+  //   title: 'Mo Salah',
+  //   icon: 'src/assets/images.jpeg',
+  //   lastMsg: 'I am fine too'
+  // },
+  // {
+  //   title: 'batman',
+  //   icon: 'src/assets/images.jpeg',
+  //   lastMsg: 'I am fine'
+  // },
+  // {
+  //   title: 'Ana Ahmed',
+  //   icon: 'src/assets/images.jpeg',
+  //   lastMsg: 'Hello there!!'
+  // },
+  // {
+  //   title: 'El Za3ama',
+  //   icon: 'src/assets/images.jpeg',
+  //   lastMsg: 'What about you?'
+  // },
+  // {
+  //   title: 'Mo Salah',
+  //   icon: 'src/assets/images.jpeg',
+  //   lastMsg: 'I am fine too'
+  // },
+  // {
+  //   title: 'batman',
+  //   icon: 'src/assets/images.jpeg',
+  //   lastMsg: 'I am fine'
+  // }
+]);
+
+const emits = defineEmits(["open"])
 
 const activatedIndex = ref(0)
 
@@ -59,9 +61,12 @@ const activateChat = (index) => {
 <template lang="pug">
 div.chatlist(:class="{ 'scrollable': chats.length > 8 }")
     h1 {{ title }}
-    .search-bar
-        img(:src="search")
-        input(type="text" placeholder="Search")
+    div.actions-wrapper
+     .search-bar
+         img(:src="search")
+        
+         input(type="text" placeholder="Search")
+     i(class="fa-solid fa-plus" @click="()=> emits('open')")
     ChatCard(v-for="(chat, index) in chats" :key="chat.title" :title="chat.title" :icon="chat.icon" :index="index" :isActive="index === activatedIndex" @activate="activateChat" :lastMsg="chat.lastMsg") 
 </template>
 
@@ -80,7 +85,7 @@ div.chatlist(:class="{ 'scrollable': chats.length > 8 }")
     gap: 10px;
     background-color: rgb(54, 64, 74);
     padding: 10px;
-    width: 100%;
+    width: 90%;
     border-radius: 5px;
     img {
       width: 20px;
@@ -99,4 +104,22 @@ div.chatlist(:class="{ 'scrollable': chats.length > 8 }")
     }
   }
 }
+
+.actions-wrapper{
+  display:flex;
+  justify-content:space-between;
+  width:100%;
+  gap:10px;
+  i{width:10%; background:var(--color-primary);  
+    border: none;
+    border-radius: 5px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 22px;
+    cursor:pointer}
+}
+
+
+
 </style>

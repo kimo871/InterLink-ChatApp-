@@ -5,11 +5,16 @@ import rooms from '../assets/icons/rooms.svg'
 import logOut from '../assets/icons/log-out.svg'
 import logo from '../assets/logo.svg'
 import { ref } from 'vue'
+import { getAuth, signOut } from 'firebase/auth';
+import { RouterLink } from 'vue-router'
+import { auth } from '../firebase/firebaseConfig.js'; // Ensure you import your Firebase configuration
+
+
 const icons = ref([
   {
     src: chat,
     alt: 'Chat Icon',
-    isActive: true
+    isActive: true,  
   },
   {
     src: profile,
@@ -27,14 +32,27 @@ const handleClick = (index) => {
     icon.isActive = i === index
   })
 }
+
+const logout = async()=>{
+  try {
+    await signOut(auth);
+    console.log('User signed out successfully.');
+    // Redirect to login page or any other page
+    window.location.href = '/login';
+  } catch (error) {
+    console.error('Error signing out:', error);
+  }
+}
 </script>
 <template lang="pug">
 div.navbar
-    img(:src="logo" alt = "Chat Vue")
+    img(src="../views/logo.png" alt = "Chat Vue")
     ul.icons-container
         li(v-for="(icon, index) in icons" :key="index" :class="{ 'activted': icon.isActive }" @click="handleClick(index)")
-            img(:src="icon.src" :alt="icon.alt")  
-    img.log-out(:src="logOut" alt = "Log Out")
+            img(:src="icon.src" :alt="icon.alt") 
+        
+    img.log-out(:src="logOut" alt = "Log Out" @click="logout")
+    img.profile-avatr(src="https://firebasestorage.googleapis.com/v0/b/interlink-1e1bf.appspot.com/o/images%2FOIP.jpeg?alt=media&token=a712242d-2c0d-4804-a43c-78e90d986081")
 </template>
 <style lang="scss" scoped>
 .navbar {
@@ -50,6 +68,12 @@ div.navbar
     width: 50px;
     height: 50px;
     cursor: pointer;
+  }
+
+  img.profile-avatr{
+   
+    border-radius: 100%;
+  
   }
 
   .log-out {

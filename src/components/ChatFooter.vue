@@ -2,13 +2,23 @@
 import emoji from '../assets/icons/emoji.svg'
 import fileShare from '../assets/icons/fileShare.svg'
 import sendButton from '../assets/icons/sendButton.svg'
+import { ref , inject } from 'vue';
+
+let store = inject("storeProvider",{})
+
+const inputValue = ref("");
+
+const sendMessage = ()=>{
+  console.log(inputValue.value);
+  store.sendMessage(inputValue.value);
+}
 </script>
 <template lang="pug">
 div.chat-footer
-    input(type="text" placeholder="Enter Message...")
+    input(type="text" placeholder="Enter Message..." v-model="inputValue")
     img(:src="emoji").emoji 
     img(:src="fileShare").file-share 
-    img(:src="sendButton").send-button 
+    img(:src="sendButton" @click="sendMessage").send-button 
 </template>
 <style lang="scss">
 .chat-footer {
