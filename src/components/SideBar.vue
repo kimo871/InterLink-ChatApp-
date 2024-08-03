@@ -1,19 +1,34 @@
 <script setup>
-import { defineProps } from 'vue'
+import { defineProps, defineExpose, ref } from 'vue'
+import Profile from './Profile.vue'
 import ChatList from './ChatList.vue'
 const { title } = defineProps({
   title: String
 })
 
-const emits = defineEmits(["open"])
+const emits = defineEmits(['open'])
+const renderedChild = ref('chats')
+defineExpose({
+  chats() {
+    renderedChild.value = 'chats'
+  },
+  groups() {
+    renderedChild.value = 'groups'
+  },
+  profile() {
+    renderedChild.value = 'profile'
+  }
+})
 </script>
 <template lang="pug">
-div.sidebar
-    h1 {{ title }}
-    ChatList(@open="()=> emits('open')")
+.sidebar
+  //- Profile(v-if="renderedChild=== 'profile'")
+  //- ChatList(v-else @open="()=> emits('open')" :title="renderedChild")
+  ChatList(@open="()=> emits('open')" :title="'groups'")
 </template>
 <style lang="scss" scoped>
 .sidebar {
+  position: relative;
   width: 25%;
   background-color: #303841;
   display: flex;

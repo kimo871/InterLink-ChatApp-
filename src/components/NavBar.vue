@@ -5,25 +5,24 @@ import rooms from '../assets/icons/rooms.svg'
 import logOut from '../assets/icons/log-out.svg'
 import logo from '../assets/logo.svg'
 import { ref } from 'vue'
-import { getAuth, signOut } from 'firebase/auth';
+import { getAuth, signOut } from 'firebase/auth'
 import { RouterLink } from 'vue-router'
-import { auth } from '../firebase/firebaseConfig.js'; // Ensure you import your Firebase configuration
-
+import { auth } from '../firebase/firebaseConfig.js' // Ensure you import your Firebase configuration
 
 const icons = ref([
   {
     src: chat,
     alt: 'Chat Icon',
-    isActive: true,  
-  },
-  {
-    src: profile,
-    alt: 'Profile Icon',
-    isActive: false
+    isActive: true
   },
   {
     src: rooms,
     alt: 'Rooms Icon',
+    isActive: false
+  },
+  {
+    src: profile,
+    alt: 'Profile Icon',
     isActive: false
   }
 ])
@@ -31,27 +30,38 @@ const handleClick = (index) => {
   icons.value.forEach((icon, i) => {
     icon.isActive = i === index
   })
+  switch (index) {
+    case 0:
+      emit('renderChats')
+      break
+    case 1:
+      emit('renderGroups')
+      break
+    case 2:
+      emit('renderProfile')
+      break
+  }
 }
+const emit = defineEmits(['renderChats', 'renderProfile', 'renderGroups'])
 
-const logout = async()=>{
+const logout = async () => {
   try {
-    await signOut(auth);
-    console.log('User signed out successfully.');
+    await signOut(auth)
+    console.log('User signed out successfully.')
     // Redirect to login page or any other page
-    window.location.href = '/login';
+    window.location.href = '/login'
   } catch (error) {
-    console.error('Error signing out:', error);
+    console.error('Error signing out:', error)
   }
 }
 </script>
 <template lang="pug">
-div.navbar
-    img(src="../views/logo.png" alt = "Chat Vue")
-    ul.icons-container
-        li(v-for="(icon, index) in icons" :key="index" :class="{ 'activted': icon.isActive }" @click="handleClick(index)")
-            img(:src="icon.src" :alt="icon.alt") 
-        
-    img.log-out(:src="logOut" alt = "Log Out" @click="logout")
+.navbar
+  img(src="../views/logo.png" alt = "Interlink Logo")
+  ul.icons-container
+    li(v-for="(icon, index) in icons" :key="index" :class="{ 'activted': icon.isActive }" @click="handleClick(index)")
+          img(:src="icon.src" :alt="icon.alt")
+  img.log-out(:src="logOut" alt = "Log Out" @click="logout")
     //- img.profile-avatr(:src="state.user.photoURL== null ? '' : state.user.photoURL ")
 </template>
 <style lang="scss" scoped>
@@ -70,10 +80,8 @@ div.navbar
     cursor: pointer;
   }
 
-  img.profile-avatr{
-   
+  img.profile-avatr {
     border-radius: 100%;
-  
   }
 
   .log-out {

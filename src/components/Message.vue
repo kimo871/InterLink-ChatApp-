@@ -1,6 +1,6 @@
 <script setup>
-import { defineProps , inject } from 'vue'
-let store = inject("storeProvider",{});
+import { defineProps, inject } from 'vue'
+let store = inject('storeProvider', {})
 const { message, sender, time, isSent, isReceived, isRead } = defineProps({
   message: String,
   sender: String,
@@ -10,23 +10,23 @@ const { message, sender, time, isSent, isReceived, isRead } = defineProps({
   isRead: Boolean
 })
 
-const getTime=(timestamp)=>{
-  const date = new Date(timestamp);
+const getTime = (timestamp) => {
+  const date = new Date(timestamp)
 
   // Extract minutes and seconds
-  const hours = String(date.getHours()).padStart(2, '0');
-  const minutes = String(date.getMinutes()).padStart(2, '0');
-  return [hours,minutes]
+  const hours = String(date.getHours()).padStart(2, '0')
+  const minutes = String(date.getMinutes()).padStart(2, '0')
+  return [hours, minutes]
 }
 let me = 'Adel Shakal'
 </script>
 <template lang="pug">
-div.message(:class="{ 'message': sender.email != store.state.user.email, 'usr-msg': sender.email == store.state.user.email }")
-    div.message-sender
+.message(:class="{ 'message': sender.email != store.state.user.email, 'usr-msg': sender.email == store.state.user.email }")
+    .message-sender
       p {{ sender.name}}
-    div.message-content
+    .message-content
       p {{ message }}
-    div.message-status
+    .message-status
       p {{ getTime(time)[0] }}:{{ getTime(time)[1] }}
 </template>
 <style lang="scss" scoped>

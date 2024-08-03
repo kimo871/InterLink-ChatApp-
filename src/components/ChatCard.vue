@@ -17,11 +17,11 @@ const handleClick = () => {
 </script>
 
 <template lang="pug">
-div.chatcard(:class="{ active: isActive }" @click="handleClick")
-    img(:src="icon")
-    .chatcard-info
-        h1.contact-name {{ title }}
-        p.contact-message {{ lastMsg }}
+.chatcard(:class="{ active: isActive }" @click="handleClick")
+  img(:src="icon")
+  .chatcard-info
+    h1.contact-name {{ title }}
+    p.contact-message {{ lastMsg }}
 </template>
 <style lang="scss" scoped>
 .chatcard {

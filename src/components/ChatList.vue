@@ -1,14 +1,17 @@
 <script setup>
-import { defineProps, reactive, ref  , onMounted  ,inject} from 'vue'
+import { defineProps, reactive, ref, onMounted, inject } from 'vue'
 import ChatCard from './ChatCard.vue'
 import search from '../assets/icons/search.svg'
-let store = inject("storeProvider",{})
-onMounted(()=>{
-   store.fetchRecentChats();
-})
+import addChat from '../assets/icons/add.svg'
 
+let store = inject('storeProvider', {})
 const { title } = defineProps({
   title: String
+})
+
+onMounted(() => {
+  if (title === 'chats') store.fetchRecentChats()
+  else store.fetchGroups()
 })
 
 const chats = reactive([
@@ -52,29 +55,30 @@ const chats = reactive([
   //   icon: 'src/assets/images.jpeg',
   //   lastMsg: 'I am fine'
   // }
-]);
+])
 
-const emits = defineEmits(["open"])
+const emits = defineEmits(['open'])
 
 const activatedIndex = ref(0)
-
-const activateChat = (index,userDetails) => {
+const activateChat = (index, userDetails) => {
   //activatedIndex.value = index; // ui effect
-  store.getMessages(index,userDetails)
-
+  store.getMessages(index, userDetails)
+}
+const activateGroup = (groupId) => {
+  store.getGroupMessages(groupId)
 }
 </script>
 <template lang="pug">
-div.chatlist(:class="{ 'scrollable': chats.length > 8 }")
-    h1 {{ title }}
-    div.actions-wrapper
-     .search-bar
-         img(:src="search")
-        
-         input(type="text" placeholder="Search")
-     i(class="fa-solid fa-plus" @click="()=> emits('open')")
+.chatlist
+  img(:src="addChat" class="add-chat" @click="()=> emits('open')")
+  h1 {{ title }}
+  .search-bar
+    img(:src="search")        
+    input(type="text" placeholder="Search")
     //-  ChatCard(v-for="chat in store.state.recentChats"  :title="chat.userDetails.name" :icon="chat.chatDetails.photoURL" :index="index" :isActive="index === activatedIndex" @activate="activateChat" :lastMsg="chat.chatDetails.lastMessage") 
-    ChatCard(v-for="chat in store.state.recentChats"  :title="chat.userDetails.name" :icon="chat.userDetails.photoURL" :index="index" :isActive="index === activatedIndex" @activate="()=>activateChat(chat.chatDetails.chatId,chat.userDetails)" :lastMsg="chat.chatDetails.lastMessage") 
+  .chat-cards(:class="{ 'scrollable': chats.length > 8 }")
+    ChatCard(v-if="title==='chats'" v-for="chat in store.state.recentChats"  :title="chat.userDetails.name" :icon="chat.userDetails.photoURL" :index="index" :isActive="index === activatedIndex" @activate="()=>activateChat(chat.chatDetails.chatId,chat.userDetails)" :lastMsg="chat.chatDetails.lastMessage") 
+    ChatCard(v-else v-for="group in store.state.recentGroups"  :title="group.name" :icon="'../assets/icons/group.svg'" :index="index" :isActive="index === activatedIndex" @activate="()=>activateGroup(group.groupId)" :lastMsg="group.lastMessage") 
 </template>
 
 <style lang="scss" scoped>
@@ -83,6 +87,18 @@ div.chatlist(:class="{ 'scrollable': chats.length > 8 }")
   background-color: #303841;
   align-items: center;
   text-align: left;
+
+  .add-chat {
+    position: absolute;
+    right: 20px;
+    bottom: 50px;
+    width: 50px;
+    height: 50px;
+    cursor: pointer;
+    &:hover {
+      transform: scale(1.1);
+    }
+  }
   h1 {
     color: white;
   }
@@ -110,23 +126,31 @@ div.chatlist(:class="{ 'scrollable': chats.length > 8 }")
       }
     }
   }
+  .chat-cards {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    padding: 10px;
+    width: 90%;
+    height: 70%;
+  }
 }
 
-.actions-wrapper{
-  display:flex;
-  justify-content:space-between;
-  width:100%;
-  gap:10px;
-  i{width:10%; background:var(--color-primary);  
+.actions-wrapper {
+  display: flex;
+  justify-content: space-between;
+  width: 100%;
+  gap: 10px;
+  i {
+    width: 10%;
+    background: var(--color-primary);
     border: none;
     border-radius: 5px;
     display: flex;
     justify-content: center;
     align-items: center;
     font-size: 22px;
-    cursor:pointer}
+    cursor: pointer;
+  }
 }
-
-
-
 </style>

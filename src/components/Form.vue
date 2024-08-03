@@ -1,168 +1,169 @@
 <script setup>
-import{inject} from 'vue'
+import { inject } from 'vue'
 defineProps({
-    handleSubmit:{
-        type:Function,
-        required:true
-    },
-    
+  handleSubmit: {
+    type: Function,
+    required: true
+  }
 })
 
-let store = inject("storeProvider",{})
+let store = inject('storeProvider', {})
 </script>
 
-<template >
-<div class="form_container">
+<template>
+  <div class="form_container">
     <form @submit.prevent="handleSubmit" class="form" method="post">
-    <div :style="{ 
-    background: store.state.feedback.status === 200 ? 'green' : 'red',
-    display: store.state.feedback.status==null ? 'none' : 'block' 
-  }" class="feedback">
-    {{ store.state.feedback.msg}}
-  </div>
-        <slot>
-
-        </slot>
+      <div
+        :style="{
+          background: store.state.feedback.status === 200 ? 'green' : 'red',
+          display: store.state.feedback.status == null ? 'none' : 'block'
+        }"
+        class="feedback"
+      >
+        {{ store.state.feedback.msg }}
+      </div>
+      <slot> </slot>
     </form>
-</div>
-
+  </div>
 </template>
 
-
 <style lang="scss">
-@import "@/assets/scss/mixins";
-.form_container{
-        width:80%;
-        padding:20px 0px;
-        @include horizon-center;
+@import '@/assets/scss/mixins';
+.form_container {
+  width: 80%;
+  padding: 20px 0px;
+  @include horizon-center;
 
-    form{
-        @include horizon-center;
+  form {
+    @include horizon-center;
+    @include perfect-center;
+    flex-direction: column;
+    color: var(--color-primary-light);
+    font-size: 16px;
+    gap: 0.3em;
+    padding: 2em;
+    background: var(--section-background-light);
+    border-radius: 7px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.05);
+    width: 50%;
+
+    .close-wrapper {
+      width: 100%;
+      display: flex;
+      justify-content: flex-end;
+      i {
+        cursor: pointer;
+      }
+    }
+
+    .field-wrapper {
+      width: 90%;
+      margin-top: 7px;
+      margin-bottom: 7px;
+      .avatar-wrapper {
         @include perfect-center;
-        flex-direction:column;
-        color:var(--color-primary-light);
-        font-size:16px;
-        gap:0.3em;
-        padding:2em;
-        background:var(--section-background-light);
-        border-radius:7px;
-        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.05);
-        width:50%;
 
-        .close-wrapper{
+        label {
+          position: relative;
+          top: 0px;
+          width: 9rem;
+          height: 9rem;
+          border-radius: 50%;
+          cursor: pointer;
+          img {
+            position: absolute;
+            top: 0px;
             width: 100%;
-            display: flex;
-            justify-content: flex-end;
-            i{cursor:pointer;}
-           }
-        
+            height: 100%;
+            border-radius: 50%;
+          }
 
-        .field-wrapper{
-            width:90%;
-            margin-top:7px;
-            margin-bottom:7px;
-            .avatar-wrapper{
-                @include perfect-center;
-
-                label{
-                    position:relative;
-                    top:0px;
-                    width:9rem;
-                    height:9rem;;
-                    border-radius:50%;
-                    cursor:pointer; 
-                    img{
-                        position:absolute;
-                        top:0px;
-                        width:100%;
-                        height:100%;
-                        border-radius:50%;
-                    }
-
-                    .action-wrapper{
-                        position:absolute;
-                        top:0px;
-                        border-radius:50%;
-                        @include perfect-center;
-                        width:9rem;
-                        height:9rem;
-                        background:transparent;
-                        transition:0.3s ease-in;
-                        color:var(--color-text-primary);
-                        i{opacity:0}
-                    }
-
-                    .action-wrapper:hover {
-                        background:#18181880;
-                    }
-
-                    .action-wrapper:hover i {
-                        opacity:1;
-                    }
-
-                
-                }
+          .action-wrapper {
+            position: absolute;
+            top: 0px;
+            border-radius: 50%;
+            @include perfect-center;
+            width: 9rem;
+            height: 9rem;
+            background: transparent;
+            transition: 0.3s ease-in;
+            color: var(--color-text-primary);
+            i {
+              opacity: 0;
             }
-            .input-wrapper{
-                position:relative;
-                i{
-                    @include perfect-center;
-                    opacity:0.7;
-                    position:absolute;
-                    width:10%;
-                    height:100%;
-                    top:0px;
-                    left:0px;
-                    text-align:center;
-                    color:var(--color-text-primary);
-                    background:var(--primary-background);
-                }  
-            }
+          }
 
-            label{text-align:left; opacity:0.75;}
+          .action-wrapper:hover {
+            background: #18181880;
+          }
 
-            input{
-                border:0.08px solid  #7a7f9a45;
-                border-radius:3px;
-                background:#fff;
-                padding:15px;
-                width:100%; 
-                height:100%;
-                padding-left:11%;
-                
-            }
+          .action-wrapper:hover i {
+            opacity: 1;
+          }
         }
-        .check{
-            display:flex;
-            align-items:center;
-            gap:0em;
-            input{ margin-right:10px;}
-            label{font-size:16px !important;}
+      }
+      .input-wrapper {
+        position: relative;
+        i {
+          @include perfect-center;
+          opacity: 0.7;
+          position: absolute;
+          width: 10%;
+          height: 100%;
+          top: 0px;
+          left: 0px;
+          text-align: center;
+          color: var(--color-text-primary);
+          background: var(--primary-background);
         }
-        input[type="submit"]{
-            background:var(--color-primary);
-            color:var(--secondary-background);
-            border:0px;
-            padding:12px 12px;
-            text-align:center;
-            cursor:pointer;
-        }
+      }
+
+      label {
+        text-align: left;
+        opacity: 0.75;
+      }
+
+      input {
+        border: 0.08px solid #7a7f9a45;
+        border-radius: 3px;
+        background: #fff;
+        padding: 15px;
+        width: 100%;
+        height: 100%;
+        padding-left: 11%;
+      }
     }
-
-    p{
-        text-align:center;
-        margin-top:20px;
-        color:var(--color-text-secondary)
+    .check {
+      display: flex;
+      align-items: center;
+      gap: 0em;
+      input {
+        margin-right: 10px;
+      }
+      label {
+        font-size: 16px !important;
+      }
     }
+    input[type='submit'] {
+      background: var(--color-primary);
+      color: var(--secondary-background);
+      border: 0px;
+      padding: 12px 12px;
+      text-align: center;
+      cursor: pointer;
+    }
+  }
+
+  p {
+    text-align: center;
+    margin-top: 20px;
+    color: var(--color-text-secondary);
+  }
 }
 
-
-
-
-@media(max-width:1400px){
-  form{
-    width:90% !important;
-   
+@media (max-width: 1400px) {
+  form {
+    width: 90% !important;
   }
 }
 </style>
