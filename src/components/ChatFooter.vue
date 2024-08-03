@@ -11,6 +11,7 @@ const inputValue = ref("");
 const sendMessage = ()=>{
   console.log(inputValue.value);
   store.sendMessage(inputValue.value);
+  inputValue.value="";
 }
 </script>
 <template lang="pug">

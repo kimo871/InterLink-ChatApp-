@@ -1,5 +1,9 @@
 <script setup>
 import Message from './Message.vue'
+import { inject } from 'vue';
+
+let store = inject("storeProvider",{});
+
 let messages = [
   // {
   //   message: 'Hello',
@@ -54,7 +58,7 @@ let me = 'Adel Shakal'
 </script>
 <template lang="pug">
 .chat-body.scrollable
-    Message(v-for="message in messages" :key="message.time" v-bind="message" :class="{ 'message': message.sender === this.me }")
+    Message(v-for="message in (store.state.openedChat==null ? [] : Object.values(store.state.openedChat.messages) )" :key="message.time" v-bind="message"  :sender="message.sender" )
 </template>
 <style lang="scss">
 .chat-body {

@@ -1,7 +1,11 @@
 <script setup>
-import { defineProps, reactive, ref } from 'vue'
+import { defineProps, reactive, ref  , onMounted  ,inject} from 'vue'
 import ChatCard from './ChatCard.vue'
 import search from '../assets/icons/search.svg'
+let store = inject("storeProvider",{})
+onMounted(()=>{
+   store.fetchRecentChats();
+})
 
 const { title } = defineProps({
   title: String
@@ -54,8 +58,10 @@ const emits = defineEmits(["open"])
 
 const activatedIndex = ref(0)
 
-const activateChat = (index) => {
-  activatedIndex.value = index
+const activateChat = (index,userDetails) => {
+  //activatedIndex.value = index; // ui effect
+  store.getMessages(index,userDetails)
+
 }
 </script>
 <template lang="pug">
@@ -67,7 +73,8 @@ div.chatlist(:class="{ 'scrollable': chats.length > 8 }")
         
          input(type="text" placeholder="Search")
      i(class="fa-solid fa-plus" @click="()=> emits('open')")
-    ChatCard(v-for="(chat, index) in chats" :key="chat.title" :title="chat.title" :icon="chat.icon" :index="index" :isActive="index === activatedIndex" @activate="activateChat" :lastMsg="chat.lastMsg") 
+    //-  ChatCard(v-for="chat in store.state.recentChats"  :title="chat.userDetails.name" :icon="chat.chatDetails.photoURL" :index="index" :isActive="index === activatedIndex" @activate="activateChat" :lastMsg="chat.chatDetails.lastMessage") 
+    ChatCard(v-for="chat in store.state.recentChats"  :title="chat.userDetails.name" :icon="chat.userDetails.photoURL" :index="index" :isActive="index === activatedIndex" @activate="()=>activateChat(chat.chatDetails.chatId,chat.userDetails)" :lastMsg="chat.chatDetails.lastMessage") 
 </template>
 
 <style lang="scss" scoped>

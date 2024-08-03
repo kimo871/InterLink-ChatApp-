@@ -1,10 +1,29 @@
 <script setup>
 import { RouterLink, RouterView } from 'vue-router'
 import DashBoard from './views/DashBoard.vue'
-import { provide } from 'vue';
+import { provide , onMounted } from 'vue';
 import { useStore } from './stores/store';
+import { auth } from './firebase/firebaseConfig';
+import { onAuthStateChanged } from 'firebase/auth';
 
-provide("storeProvider",useStore());
+let store = useStore();
+
+onMounted(()=>{
+  // Set up the auth state listener
+const unsubscribe = onAuthStateChanged(auth, (currentUser) => {
+  if (currentUser) {
+    console.log(currentUser)
+    store.state.user=currentUser;
+   
+  } else {
+    // User is signed out
+    user = null;
+    console.log('User signed out');
+  }
+})
+})
+
+provide("storeProvider",store);
 
 </script>
 

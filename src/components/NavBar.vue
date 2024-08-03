@@ -52,7 +52,7 @@ div.navbar
             img(:src="icon.src" :alt="icon.alt") 
         
     img.log-out(:src="logOut" alt = "Log Out" @click="logout")
-    img.profile-avatr(src="https://firebasestorage.googleapis.com/v0/b/interlink-1e1bf.appspot.com/o/images%2FOIP.jpeg?alt=media&token=a712242d-2c0d-4804-a43c-78e90d986081")
+    //- img.profile-avatr(:src="state.user.photoURL== null ? '' : state.user.photoURL ")
 </template>
 <style lang="scss" scoped>
 .navbar {
