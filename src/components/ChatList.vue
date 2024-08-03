@@ -2,6 +2,7 @@
 import { defineProps, reactive, ref  , onMounted  ,inject} from 'vue'
 import ChatCard from './ChatCard.vue'
 import search from '../assets/icons/search.svg'
+import Loader from './Loader.vue';
 let store = inject("storeProvider",{})
 onMounted(()=>{
    store.fetchRecentChats();
@@ -10,6 +11,10 @@ onMounted(()=>{
 const { title } = defineProps({
   title: String
 })
+
+
+
+console.log(store)
 
 const chats = reactive([
   // {
@@ -65,7 +70,8 @@ const activateChat = (index,userDetails) => {
 }
 </script>
 <template lang="pug">
-div.chatlist(:class="{ 'scrollable': chats.length > 8 }")
+Loader(v-if="store.state.loading.recentChats")
+div.chatlist(v-else :class="{ 'scrollable': chats.length > 8 }")
     h1 {{ title }}
     div.actions-wrapper
      .search-bar

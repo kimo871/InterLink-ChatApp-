@@ -9,7 +9,10 @@ export const useStore = defineStore('store', () => {
 
   
   let state = useState({
-    loading:false,
+    loading:{
+      recentChats:false,
+      chatBody : false
+    },
     user:null,
     recentChats:[],
     openedChat:null,
@@ -94,7 +97,7 @@ watch(
 
   const logIn = async (userData)=>{
     try{
-    state.value.loading = true;
+    //state.value.loading = true;
     const credentials = await  signInWithEmailAndPassword(auth,userData.email,userData.password);
     console.log(credentials)
     state.value.user = credentials.user;
@@ -112,14 +115,14 @@ watch(
      }
     }
     finally{
-      state.value.loading = false;
+      //state.value.loading = false;
     }
     }
   
 
   const uploadImage = async (file) => {
     try {
-      state.loading = true;
+      //state.loading = true;
       const storage = getStorage();
       const storagePath = storageRef(storage, `images/${file.name}`); // Ensure ref is used correctly
       await uploadBytes(storagePath, file); // Upload the file
@@ -134,7 +137,7 @@ watch(
       // throw err
     }
     finally{
-      state.loading = false;
+      //state.loading = false;
     }
   };
 
@@ -174,7 +177,7 @@ watch(
     }
 
     finally{
-       state.loading = false;
+       //state.loading = false;
     }
     
   }
@@ -188,7 +191,7 @@ watch(
     console.log("here.......")
     console.log(userEmail)
       try{
-        state.loading = false;
+        //state.loading = false;
         const userRef = ref(db,`users`);
            // Reference to a child node with the sanitized email
         const childRef = child(userRef, userEmail);
@@ -280,7 +283,7 @@ watch(
      console.log(err)
     }
     finally{
-     state.loading=false;
+     //state.loading=false;
     }
 
   }
@@ -347,7 +350,7 @@ watch(
 
   const createChat = async ()=>{
       try{
-        state.loading = false;
+        //state.loading = false;
         const chatRef = ref(db,`chats`);
         const newChatRef = push(chatRef);
         const key = newChatRef.key;
@@ -381,7 +384,7 @@ watch(
         console.log(err);
       }
       finally{
-        state.loading = false;
+        //state.loading = false;
       }
   }
 
@@ -424,6 +427,8 @@ watch(
 
   const getMessages = async(chatId,userDetails)=>{
      try{
+      state.value.openedChat= null;
+      state.value.loading.chatBody=true;
       let result= {};
        const chatRef = ref(db,`messages/${chatId}`);
        const dataRef = await get(chatRef);
@@ -446,7 +451,7 @@ watch(
       console.log(err);
      }
      finally{
-
+      state.value.loading.chatBody=false;
      }
   }
 
@@ -470,15 +475,18 @@ watch(
 
   const fetchRecentChats = async () => {
     try {
+      state.value.loading.recentChats=true;
       const userEmail = state.value.user.email.replace(/\./g, ',');
       const userChatsRef = ref(db, `userChats/${userEmail}`);
+      
       const snapshot = await get(userChatsRef);
   
       if (snapshot.exists()) {
         const chatIds = Object.keys(snapshot.val());
         // Fetch chat details for each chat ID sequentially
         const chatDetails = [];
-        for await (const chatId of chatIds) {
+        for  (const chatId of chatIds) {
+          try{
           const chatRef = ref(db,`chats/${chatId}`);
           const details = await get(chatRef);
           if (details) {
@@ -497,6 +505,11 @@ watch(
             chatDetails.push({chatDetails:details.val(),userDetails:user});
           }
         }
+          catch(err){
+           console.log(err)
+          }
+          
+        }
         state.value.recentChats = chatDetails;
       } else {
         return []; // No chats found
@@ -504,6 +517,9 @@ watch(
     } catch (err) {
       console.error('Error fetching recent chats:', err);
       return [];
+    }
+    finally{
+      state.value.loading.recentChats=false;
     }
   };
 

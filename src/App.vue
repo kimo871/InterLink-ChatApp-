@@ -5,7 +5,7 @@ import { provide , onMounted } from 'vue';
 import { useStore } from './stores/store';
 import { auth } from './firebase/firebaseConfig';
 import { onAuthStateChanged } from 'firebase/auth';
-
+import Loader from './components/Loader.vue';
 let store = useStore();
 
 onMounted(()=>{

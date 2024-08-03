@@ -3,11 +3,14 @@ import ChatHeader from './ChatHeader.vue'
 import ChatBody from './ChatBody.vue'
 import ChatFooter from './ChatFooter.vue'
 import EmptyChat from './EmptyChat.vue'
-import { inject , watch} from 'vue'
+import Loader from './Loader.vue'
+import { inject , watch , ref} from 'vue'
 
 const store = inject("storeProvider",{ state: { openedChat: null } })
 
-console.log(store)
+const loader = ref({status:false})
+
+;
 
 // Watch for changes in the openedChat property
 watch(
@@ -22,12 +25,13 @@ watch(
 
 </script>
 <template lang="pug">
+
 div.chatroom
-    
+    Loader(v-if="store.state.loading.chatBody")
     ChatHeader(v-if="store.state.openedChat!=null")
     ChatBody(v-if="store.state.openedChat!=null")
     ChatFooter(v-if="store.state.openedChat!=null")
-    EmptyChat(v-else)
+    EmptyChat(v-if="store.state.openedChat==null && !store.state.loading.chatBody")
 </template>
 <style lang="scss" scoped>
 .chatroom {
