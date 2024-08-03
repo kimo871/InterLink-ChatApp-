@@ -1,5 +1,5 @@
 <script setup>
-import { defineProps, reactive, ref, onMounted, inject } from 'vue'
+import { reactive, ref, onMounted, inject } from 'vue'
 import ChatCard from './ChatCard.vue'
 import search from '../assets/icons/search.svg'
 import addChat from '../assets/icons/add.svg'

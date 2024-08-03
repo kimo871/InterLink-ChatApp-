@@ -1,5 +1,5 @@
 <script setup>
-import { defineProps, inject } from 'vue'
+import { inject } from 'vue'
 let store = inject('storeProvider', {})
 const { message, sender, time, isSent, isReceived, isRead } = defineProps({
   message: String,

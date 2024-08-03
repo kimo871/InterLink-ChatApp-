@@ -1,5 +1,5 @@
 <script setup>
-import { defineProps, defineExpose, ref } from 'vue'
+import { ref } from 'vue'
 import Profile from './Profile.vue'
 import ChatList from './ChatList.vue'
 const { title } = defineProps({
@@ -22,9 +22,8 @@ defineExpose({
 </script>
 <template lang="pug">
 .sidebar
-  //- Profile(v-if="renderedChild=== 'profile'")
-  //- ChatList(v-else @open="()=> emits('open')" :title="renderedChild")
-  ChatList(@open="()=> emits('open')" :title="'groups'")
+  Profile(v-if="renderedChild=== 'profile'")
+  ChatList(v-else @open="()=> emits('open')" :title="renderedChild")
 </template>
 <style lang="scss" scoped>
 .sidebar {

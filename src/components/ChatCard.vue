@@ -1,6 +1,4 @@
 <script setup>
-import { defineProps, defineEmits } from 'vue'
-
 const props = defineProps({
   title: String,
   icon: String,
