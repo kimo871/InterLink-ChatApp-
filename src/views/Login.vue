@@ -1,9 +1,11 @@
 <script setup>
 import logo from './logo.svg';
-import {ref ,inject} from "vue"
+import {ref ,inject,onBeforeMount} from "vue"
 import { RouterLink } from 'vue-router';
 import Form from '../components/Form.vue'
 import { validatorMap } from '@/Validators';
+import { onAuthStateChanged } from 'firebase/auth';
+import {auth} from "../firebase/firebaseConfig"
 
 import {useRouter} from "vue-router"
 
@@ -13,6 +15,27 @@ let email = ref(null);
 
 
 let store = inject("storeProvider",{});
+
+onBeforeMount(async()=>{
+  try{
+  const user = await new Promise((resolve) => {
+      
+      console.log('Waiting for auth state change');
+      const unsubscribe = onAuthStateChanged(auth, (user) => {
+        console.log('Auth state changed:', user);
+        resolve(user);
+        unsubscribe(); 
+      });
+    });
+    if(user){
+      router.push("/dashboard")
+    }
+
+  }
+  catch(err){
+    console.log(err)
+  }
+})
 
 
 

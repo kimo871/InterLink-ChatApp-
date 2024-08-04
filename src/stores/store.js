@@ -3,7 +3,7 @@ import { defineStore } from 'pinia'
 import { getAuth, createUserWithEmailAndPassword , signInWithEmailAndPassword , updateProfile } from "firebase/auth";
 import {auth,db} from "../firebase/firebaseConfig"
 import {getStorage,ref as storageRef,uploadBytes,getDownloadURL} from "firebase/storage"
-import { ref , set , get , child , push,update} from 'firebase/database';
+import { ref , set , get , child , push,update,onValue} from 'firebase/database';
 
 export const useStore = defineStore('store', () => {
 
@@ -292,11 +292,6 @@ watch(
     console.log("here.......")
     
       try{
-        // state.loading = false;
-        // const chatRef = ref(db,`chats`);
-        // const newChatRef = push(chatRef);
-        // const key = newChatRef.key;
-
         let answer = await checkChat();
 
         console.log(answer)
@@ -307,33 +302,6 @@ watch(
 
         await createMessage(answer,msg);
 
-      //  const snapshot =  await set(newChatRef,{
-      //   participants : ["mku0@gmail.com",state.value.openedChat.userData.email],
-      //   lastMessage: null,
-      //   lastTime: null,
-      //  });
-
-      //  await update(newChatRef,{
-      //   lastMessage:"kimo is here ",
-      //   lastTime : 2
-      //  })
-
-      //  let msgRef = ref(db,"messages");
-
-      //  let newMsgRef = push(msgRef);
-
-      //  const message = {
-      //   message : msg,
-      //   time : Date.now(),
-      //   sender: state.value.user.email, // Example additional field
-      //   chatId: key // Example additional field
-      //  }
-
-      //  await set(newMsgRef,message)
-
-
-
-        //state.value.openedChat.messages = {...state.value.openedChat.messages , message}
 
       }
       catch(err){
@@ -473,55 +441,67 @@ watch(
   }
 
 
-  const fetchRecentChats = async () => {
+  const fetchRecentChats = async() => {
     try {
-      state.value.loading.recentChats=true;
+      state.value.loading.recentChats = true;
       const userEmail = state.value.user.email.replace(/\./g, ',');
       const userChatsRef = ref(db, `userChats/${userEmail}`);
-      
-      const snapshot = await get(userChatsRef);
   
-      if (snapshot.exists()) {
-        const chatIds = Object.keys(snapshot.val());
-        // Fetch chat details for each chat ID sequentially
-        const chatDetails = [];
-        for  (const chatId of chatIds) {
-          try{
-          const chatRef = ref(db,`chats/${chatId}`);
-          const details = await get(chatRef);
-          if (details) {
-            const answer = details.val();
-            console.log(state.value.user.email)
-            
-            console.log(answer.participants)
-             let user_email = Object.keys(answer.participants).filter((email)=> email!=state.value.user.email.replace(/\./g, ','))
-            console.log(user_email)
-            const userRef = ref(db,`users/${user_email[0]}`)
-            let user = await get(userRef);
-            if(user){
-              user = user.val();
-              console.log(user)
+      onValue(userChatsRef, (snapshot) => {
+        if (snapshot.exists()) {
+          const chatIds = Object.keys(snapshot.val());
+          const chatDetails = [];
+  
+          // Use Promise.all to fetch all chat details in parallel
+          const fetchChatDetails = chatIds.map(async (chatId) => {
+            try {
+              const chatRef = ref(db, `chats/${chatId}`);
+              const detailsSnapshot = await get(chatRef);
+  
+              if (detailsSnapshot.exists()) {
+                const answer = detailsSnapshot.val();
+                const otherUserEmail = Object.keys(answer.participants).find(email => email !== userEmail);
+  
+                if (otherUserEmail) {
+                  const userRef = ref(db, `users/${otherUserEmail}`);
+                  const userSnapshot = await get(userRef);
+  
+                  if (userSnapshot.exists()) {
+                    const userDetails = userSnapshot.val();
+                    chatDetails.push({ chatDetails: answer, userDetails });
+                  } else {
+                    console.error(`User details not found for ${otherUserEmail}`);
+                  }
+                } else {
+                  console.error(`No other participant found for chat ${chatId}`);
+                }
+              }
+            } catch (error) {
+              console.error('Error fetching chat details:', error);
             }
-            chatDetails.push({chatDetails:details.val(),userDetails:user});
-          }
+          });
+  
+          // Wait for all chat details to be fetched before updating state
+          Promise.all(fetchChatDetails)
+            .then(() => {
+              state.value.recentChats = chatDetails;
+            })
+            .catch((error) => {
+              console.error('Error fetching chat details:', error);
+            });
+        } else {
+          state.value.recentChats = []; // No chats found
         }
-          catch(err){
-           console.log(err)
-          }
-          
-        }
-        state.value.recentChats = chatDetails;
-      } else {
-        return []; // No chats found
-      }
-    } catch (err) {
-      console.error('Error fetching recent chats:', err);
-      return [];
-    }
-    finally{
-      state.value.loading.recentChats=false;
+      });
+    } catch (error) {
+      console.error('Error fetching recent chats:', error);
+      state.value.recentChats = [];
+    } finally {
+      state.value.loading.recentChats = false;
     }
   };
+  
+  
 
 
   // const getChatDetails = async (chatId) => {

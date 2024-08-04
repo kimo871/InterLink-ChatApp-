@@ -1,14 +1,40 @@
 <script setup>
 import logo from './logo.svg';
-import {ref,inject,watch} from "vue"
+import { useRouter } from 'vue-router';
+import {ref,inject,watch,onBeforeMount} from "vue"
 import {db} from "../firebase/firebaseConfig"
 import { RouterLink } from 'vue-router';
 import Form from '../components/Form.vue';
 import { validatorMap } from '@/Validators';
 import {getStorage,ref as storageRef,uploadBytes,getDownloadURL} from "firebase/storage"
 import { getFirestore, doc, setDoc } from "firebase/firestore";
+import { onAuthStateChanged } from 'firebase/auth';
+import {auth} from "../firebase/firebaseConfig"
 
-let store = inject("storeProvider",{})
+let store = inject("storeProvider",{});
+
+let router = useRouter();
+
+onBeforeMount(async()=>{
+  try{
+  const user = await new Promise((resolve) => {
+      
+      console.log('Waiting for auth state change');
+      const unsubscribe = onAuthStateChanged(auth, (user) => {
+        console.log('Auth state changed:', user);
+        resolve(user);
+        unsubscribe(); 
+      });
+    });
+    if(user){
+      router.push("/dashboard")
+    }
+
+  }
+  catch(err){
+    console.log(err)
+  }
+})
 
 
 
