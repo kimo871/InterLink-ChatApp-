@@ -41,27 +41,7 @@ const sendOption = ()=>{
     }
 
     else if(file.value.content){
-      // return new Promise((resolve,reject)=>{
-      //  console.log("file here..")
-      // const reader = new FileReader();
-      
-      // reader.onload = () => {
-      //  // console.log(reader.result);
-      //   resolve(reader.result);
-      // };
-
-      // reader.onerror = ()=>{
-      //   console.log("laaaaaaaaaa");
-      //   reject("error")
-      // }
-      
-      // reader.onerror = () => {
-      //   reject(null); // Reject if there's an error reading the file
-      // };
-      
-  //     // reader.readAsDataURL(file.value.content);
-  // })
-  return file.value.content;
+       return file.value.content;
 }
     else {
       console.log("rejected")
@@ -76,7 +56,7 @@ const sendOption = ()=>{
 const handleFile = (e)=>{
   inputValue.value = "";
   console.log(e.target.files[0])
-  if(!validateSizeFile(e.target.files[0]))alert(" Max File Size is 30 kb ! ")
+  if(!validateSizeFile(e.target.files[0])) return alert(" Max File Size is 30 kb ! ")
   file.value = {status:true,content:e.target.files[0]};
 }
 

@@ -34,4 +34,10 @@ div.sidebar
     gap: 10px;
   }
 }
+
+// @media(max-width:1400px){
+//   .sidebar{
+//     width:90% !important;
+//   }
+// }
 </style>

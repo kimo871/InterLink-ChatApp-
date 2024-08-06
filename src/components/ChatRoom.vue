@@ -47,4 +47,10 @@ div.chatroom
     align-items: center;
   }
 }
+
+// @media(max-width:1100px){
+//   .chatroom{
+//     display:none !important
+//   }
+// }
 </style>
