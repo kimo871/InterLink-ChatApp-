@@ -2,9 +2,12 @@
 import emoji from '../assets/icons/emoji.svg'
 import fileShare from '../assets/icons/fileShare.svg'
 import sendButton from '../assets/icons/sendButton.svg'
+import Emojis from './Emojis.vue';
 import { ref , inject } from 'vue';
 
 let store = inject("storeProvider",{});
+
+const emojis =  ['😀', '😃', '😄', '😁', '😆', '😅', '😂', '🤣', '😊', '😇', '🙂', '🙃', '😉', '😌', '😍', '🥰', '😘', '😗', '😙', '😚', '😋', '😛', '😝', '😜', '🤪', '🤨', '🧐', '🤓', '😎', '🤩', '😏', '😒', '😞', '😔', '😟', '😕', '🙁', '☹️', '😣', '😖', '😫', '😩', '😢', '😭', '😤', '😠', '😡', '🤬', '🤯', '😳', '🥵', '🥶', '😱', '😨', '😰', '😥', '😓', '🤗', '🤔', '🤭', '🤫', '🤥', '😶', '😐', '😑', '😬', '🙄', '😯', '😦', '😧', '😮', '😲', '🥱', '😴', '🤤', '😪', '😵', '🤐', '🥴', '🤢', '🤮', '🤧', '😷', '🤒', '🤕', '🤑', '🤠', '😈', '👿', '👹', '👺', '🤡', '💩', '👻', '💀', '☠️', '👽', '👾', '🤖', '🎃', '😺', '😸', '😹', '😻', '😼', '😽', '🙀', '😿', '😾']
 
 let fileValue = ref({})
 
@@ -15,9 +18,9 @@ let file = ref({
 
 let showEmojis = ref(false)
 
-const emojis =  ['😀', '😃', '😄', '😁', '😆', '😅', '😂', '🤣', '😊', '😇', '🙂', '🙃', '😉', '😌', '😍', '🥰', '😘', '😗', '😙', '😚', '😋', '😛', '😝', '😜', '🤪', '🤨', '🧐', '🤓', '😎', '🤩', '😏', '😒', '😞', '😔', '😟', '😕', '🙁', '☹️', '😣', '😖', '😫', '😩', '😢', '😭', '😤', '😠', '😡', '🤬', '🤯', '😳', '🥵', '🥶', '😱', '😨', '😰', '😥', '😓', '🤗', '🤔', '🤭', '🤫', '🤥', '😶', '😐', '😑', '😬', '🙄', '😯', '😦', '😧', '😮', '😲', '🥱', '😴', '🤤', '😪', '😵', '🤐', '🥴', '🤢', '🤮', '🤧', '😷', '🤒', '🤕', '🤑', '🤠', '😈', '👿', '👹', '👺', '🤡', '💩', '👻', '💀', '☠️', '👽', '👾', '🤖', '🎃', '😺', '😸', '😹', '😻', '😼', '😽', '🙀', '😿', '😾']
 
-const inputValue = ref("");
+
+let inputValue = ref("");
 
 const sendMessage = async()=>{
   try{
@@ -48,7 +51,10 @@ const sendOption = ()=>{
       return null
      
     }
- 
+}
+
+let clickEmoji = (emoji)=>{
+  inputValue.value+=emoji
 }
 
 
@@ -76,9 +82,10 @@ div.chat-footer
      p {{ file.content.name }}
      .reset-wrapper 
       i(@click="()=>file={status:false,fileName:null}" class="fa-solid fa-circle-xmark")
-    img(v-if="!file.status" :src="emoji" @click="()=>{showEmojis = !showEmojis}").emoji 
-    .emoji-wrapper(v-if="showEmojis")
-     span(v-for="emoji in emojis" class="emoji-card" @click="inputValue+=emoji") {{ emoji }}
+    img(v-if="!file.status" :src="emoji" @click="()=>{showEmojis = !showEmojis}") 
+    Emojis(v-if="showEmojis"  :click="clickEmoji"  :emojis="emojis")
+    //- .emoji-wrapper(v-if="showEmojis")
+    //-  span(v-for="emoji in emojis" class="emoji-card" @click="()=> clickEmoji(emoji)") {{ emoji }}
     div.input-wrapper
      label(for="file")
       img(:src="fileShare").file-share
@@ -86,7 +93,7 @@ div.chat-footer
     
     img(:src="sendButton" @click="sendMessage").send-button 
 </template>
-<style lang="scss">
+<style scoped lang="scss" >
 @import "../assets/scss/mixins.scss";
 
 .chat-footer {

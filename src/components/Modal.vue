@@ -38,11 +38,7 @@ const handleClose = () => {
    .field-wrapper
     .input-wrapper
      input(type='submit' value='Chat')
-  //- form(method="POST" @submit.prevent="handleSubmit")
-   
-  //-  label Email 
-  //-  input(type='text' name="email" placeholder="Enter Email ..")
-  //-  input(type="submit" value="submit")
+
 
 </template>
 

@@ -8,32 +8,32 @@ import {auth} from "../firebase/firebaseConfig"
 // console.log('test' , );
 
 const guardRoute =  async (to, from, next) => {
-  // try {
-  //   console.log(to)
-  //   const user = await new Promise((resolve) => {
+  try {
+    console.log(to)
+    const user = await new Promise((resolve) => {
     
       
-  //     console.log('Waiting for auth state change');
-  //     const unsubscribe = onAuthStateChanged(auth, (user) => {
-  //       console.log('Auth state changed:', user);
-  //       resolve(user);
-  //       unsubscribe(); 
-  //     });
-  //   });
+      console.log('Waiting for auth state change');
+      const unsubscribe = onAuthStateChanged(auth, (user) => {
+        console.log('Auth state changed:', user);
+        resolve(user);
+        unsubscribe(); 
+      });
+    });
 
-  //   if (user) {
-  //     console.log('User is authenticated, proceeding to route');
-  //     console.log("form url",from)
-  //     next(to.meta.Auth)
-  //   } else {
-  //     console.log('User not authenticated, redirecting to signup');
-  //     next(to.meta.UnAuth);
-  //   }
-  // } catch (error) {
-  //   console.error('Error during authentication check:', error);
-  //   next(to.meta.UnAuth); 
-  // }
-  next();
+    if (user) {
+      console.log('User is authenticated, proceeding to route');
+      console.log("form url",from)
+      next(to.meta.Auth)
+    } else {
+      console.log('User not authenticated, redirecting to signup');
+      next(to.meta.UnAuth);
+    }
+  } catch (error) {
+    console.error('Error during authentication check:', error);
+    next(to.meta.UnAuth); 
+  }
+  
 }
 
 

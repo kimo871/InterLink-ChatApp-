@@ -80,7 +80,7 @@ div.chatlist(v-else :class="{ 'scrollable': chats.length > 8 }")
          input(type="text" placeholder="Search")
      i(class="fa-solid fa-plus" @click="()=> emits('open')")
     //-  ChatCard(v-for="chat in store.state.recentChats"  :title="chat.userDetails.name" :icon="chat.chatDetails.photoURL" :index="index" :isActive="index === activatedIndex" @activate="activateChat" :lastMsg="chat.chatDetails.lastMessage") 
-    ChatCard(v-for="chat in store.state.recentChats"  :title="chat.userDetails.name" :icon="chat.userDetails.photoURL" :index="index" :isActive="index === activatedIndex" @activate="()=>activateChat(chat.chatDetails.chatId,chat.userDetails)" :lastMsg="chat.chatDetails.lastMessage") 
+    ChatCard(v-for="chat in store.state.recentChats"  :title="chat.userDetails.name" :icon="chat.userDetails.photoURL"   @activate="()=>activateChat(chat.chatDetails.chatId,chat.userDetails)" :lastMsg="chat.chatDetails.lastMessage") 
 </template>
 
 <style lang="scss" scoped>

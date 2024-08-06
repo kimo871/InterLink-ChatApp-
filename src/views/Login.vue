@@ -17,8 +17,8 @@ let email = ref(null);
 let store = inject("storeProvider",{});
 
 
-const handleSubmit=async(e)=>{
-  console.log("kimo");
+const handleSubmit = async(e)=>{
+  console.log("kimokjjjjjjj");
   store.clearFeedback();
   let formData = new FormData(e.target);
 
@@ -50,49 +50,40 @@ const handleSubmit=async(e)=>{
 </script>
 
 
-<template >
+<template lang="pug">
 
- <div class="wrapper"><img width="200" src="./logo.png" alt="..." />
-    <div class="brand_container">
-        <h2>Sign in </h2>
-        <p class="slogan">Sign in to continue to Interlink.</p>
-    </div>
- 
- <Form :handleSubmit="handleSubmit"  >
-    <div class="field-wrapper">
-      <label for="email">Username </label>
-      <div class="input-wrapper">
-        <i class="fa-solid fa-user"></i>
-        <input type="text" autocomplete="off" placeholder="Enter your email..." name="email" value="" /></div>
-    </div>
-    <div class="field-wrapper">
-      <label for="password">Password</label>
-      <div class="input-wrapper"><i class="fa-solid fa-eye"></i><input type="password" autocomplete="off" @change="()=&gt; console.log('dd')" placeholder="Enter your password..." name="password" /></div>
-    </div>
-    <div class="field-wrapper check ">
-      <div class="input-wrapper">
-        <input type="checkbox" />
-      </div>
-      <label>Remember me </label>
-    </div>
-    <div class="field-wrapper">
-     <div class="input-wrapper">
-        <input type="submit" value="Submit" />
-     </div>
-    </div>
-
- </Form>
-
- <div class="rest_container">
-    <p> <em>Didn't have an account ?</em><RouterLink to="/signup"> Signup now ?</RouterLink></p>
-    <p> </p><span> © 2024 Interlink. Crafted With <i class="fa-solid fa-heart"> </i>&nbsp; And Coffee</span>
- </div>
-
-</div>
-       
-      
- 
-
+.wrapper
+  img(width='200' src='./logo.png' alt='...')
+  .brand_container
+    h2 Sign in 
+    p.slogan Sign in to continue to Interlink.
+  Form(:handleSubmit='handleSubmit')
+    .field-wrapper
+      label(for='email') Username 
+      .input-wrapper
+        i.fa-solid.fa-user
+        input(type='text' autocomplete='off' placeholder='Enter your email...' name='email' value='')
+    .field-wrapper
+      label(for='password') Password
+      .input-wrapper
+        i.fa-solid.fa-eye
+        input(type='password' autocomplete='off' @change="()=> console.log('dd')" placeholder='Enter your password...' name='password')
+    .field-wrapper.check
+      .input-wrapper
+        input(type='checkbox')
+      label Remember me 
+    .field-wrapper
+      .input-wrapper
+        input(type='submit' value='Submit')
+  .rest_container
+    p
+      em Didn&apos;t have an account ?
+      RouterLink(to='/signup')  Signup now ?
+    p  
+    span
+      | &copy; 2024 Interlink. Crafted With 
+      i.fa-solid.fa-heart  
+      | &nbsp; And Coffee
 </template>
 
 <style lang="scss">

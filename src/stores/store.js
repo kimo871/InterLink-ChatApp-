@@ -4,6 +4,8 @@ import { getAuth, createUserWithEmailAndPassword , signInWithEmailAndPassword , 
 import {auth,db} from "../firebase/firebaseConfig"
 import {getStorage,ref as storageRef,uploadBytes,getDownloadURL } from "firebase/storage"
 import { ref , set , get , child , push,update,onValue,onChildChanged} from 'firebase/database';
+import { debounce } from 'lodash';
+
 
 export const useStore = defineStore('store', () => {
 
@@ -327,7 +329,9 @@ watch(
           }
         }
         finally{
-
+          let chatDetails = state.value.recentChats;
+          //chatDetails.sort((a, b) => b.chatDetails.lastTime - a.chatDetails.lastTime );
+         // state.value.recentChats= [...chatDetails];
         }
     }
 
@@ -394,14 +398,18 @@ watch(
 
           let newMsgRef = push(msgRef);
 
-          let domain =  import.meta.env.VITE_APP_DATABASE_URL+import.meta.env.VITE_APP_FIREBASE_STORAGE_BUCKET
+          let domain =  import.meta.env.VITE_APP_FIREBASE_URL+"/v0/b/"+import.meta.env.VITE_APP_FIREBASE_STORAGE_BUCKET
+          
+          console.log(domain,"ww")
 
           const message = {
-            message : result.replace(domain,""),
+            id : newMsgRef.key,
+            message : msg.type ? "Sent A file" : msg ,
             type : msg.type ?  "file" : "text",
-            download : msg.type ? msg.name : null,
+            download : msg.type ? result : null,
             time : Date.now(),
-            sender: state.value.user.email, // Example additional field
+            readBy:null,
+            sender: {email:state.value.user.email,name:state.value.user.displayName,photoURL:state.value.user.photoURL}, // Example additional field
             chatId: chatId // Example additional field
           }
 
@@ -411,9 +419,10 @@ watch(
 
           console.log({[newMsgRef.key]:message})
 
-          updateChat(chatId,msg);
+          await updateChat(chatId,message);
 
           state.value.openedChat.messages = {...state.value.openedChat.messages , [newMsgRef.key]:message}
+         
         }
         catch(err){
         console.log(err);
@@ -434,17 +443,13 @@ watch(
           const dataRef = await get(chatRef);
           let messages = dataRef.val();
           console.log(Object.values(messages));
-          for await ( let [key,item] of Object.entries(dataRef.val())){
-            let userRef = ref(db,`users/${item.sender.replace(/\./g, ',')}`);
-            let userData = await get(userRef);
-            userData = userData.val();
-            item.sender = userData;
+          for ( let [key,item] of Object.entries(dataRef.val())){
+            //let userRef = ref(db,`users/${item.sender.email.replace(/\./g, ',')}`);
+            //let userData = await get(userRef);
+            //userData = userData.val();
             result[key]=item;
           }
           
-          //  let userRef = ref(db,`users/${Object.values(messages)[0].sender.replace(/\./g, ',')}`);
-          //  let userData = await get(userRef);
-          //  userData = userData.val();
           state.value.openedChat= {userData:userDetails,messages:result};
         }
         catch(err){
@@ -458,21 +463,36 @@ watch(
 
 
    // ===============================================================================================
+    const reactMessage = async (chatId,messageId,emoji)=>{
+      try{
+       const msgRef = ref(db,`messages/${chatId}/${messageId}`);
+       await update(msgRef,{
+        reaction :  emoji
+       })      
+      }
+
+      catch(err){
+        console.log(err);
+      }
+    }
 
 
-
-      const updateChat = async (chatId,msg) =>{
+      const updateChat = async (chatId,message) =>{
           try{
             const chatRef = ref(db,`chats/${chatId}`);
             await update(chatRef,{
-              lastMessage:msg
+              lastMessage:message.message,
+              lastTime:message.time
             })
+            console.log(message.time)
+            
           }
           catch(err){
             console.log(err);
           }
           finally{
-            state.loading=false;
+            console.log("here update")
+            
           }
       }
 
@@ -490,6 +510,7 @@ watch(
             if (snapshot.exists()) {
               const chatIds = Object.keys(snapshot.val());
               const chatDetails = [];
+              
       
               // Use Promise.all to fetch all chat details in parallel
               const fetchChatDetails = chatIds.map(async (chatId) => {
@@ -507,22 +528,13 @@ watch(
       
                       if (userSnapshot.exists()) {
                         const userDetails = userSnapshot.val();
-      
-                        // Add listener for last message in messages/chatId
+            
                         const messageRef = ref(db, `messages/${chatId}`);
                         onValue(messageRef, (messageSnapshot) => {
-                          const messages = messageSnapshot.val();
-                          console.log(messages,"fg")
-                          // Find latest message or handle messages array as needed
-                          const lastMessage = Object.values(messages)[Object.keys(messages).length-1];
-                          console.log(lastMessage,"kk") 
-                          const existingChatIndex = chatDetails.findIndex(chat => chat.chatDetails.chatId === chatId);
-                          if (existingChatIndex !== -1) {
-                            chatDetails[existingChatIndex].chatDetails.lastMessage = lastMessage.message;
-                            state.value.recentChats= [...chatDetails]; 
-                          }
+                           listenRecentMessages(chatId,messageSnapshot,chatDetails);
                         });
                         chatDetails.push({ chatDetails: answer, userDetails });
+                       
                       } else {
                         console.error(`User details not found for ${otherUserEmail}`);
                       }
@@ -539,6 +551,8 @@ watch(
               // Wait for all chat details to be fetched before updating state
               Promise.all(fetchChatDetails)
                 .then(() => {
+                  chatDetails.sort((a, b) => b.chatDetails.lastTime - a.chatDetails.lastTime );
+                  console.log(chatDetails)
                   state.value.recentChats = chatDetails;
                 })
                 .catch((error) => {
@@ -557,6 +571,32 @@ watch(
           state.value.loading.recentChats = false;
         }
       };
+
+      const listenRecentMessages = debounce((chatId,messageSnapshot,chatDetails)=>{
+        console.log("message added")
+        const messages = messageSnapshot.val();
+        console.log(messages)
+        if(state.value.openedChat.messages){
+          console.log("jorray")
+         state.value.openedChat.messages = messages;
+        }
+      // Find latest message or handle messages array as needed
+      const lastMessage = Object.values(messages)[Object.keys(messages).length-1];
+      console.log(lastMessage,"kk") 
+      
+      const existingChatIndex = chatDetails.findIndex(chat => chat.chatDetails.chatId === chatId);
+      console.log(existingChatIndex)
+      if (existingChatIndex !== -1) {
+        console.log("jj")
+        chatDetails[existingChatIndex].chatDetails.lastMessage = lastMessage.message;
+        chatDetails[existingChatIndex].chatDetails.lastTime = lastMessage.time;
+        chatDetails.sort((a, b) => b.chatDetails.lastTime - a.chatDetails.lastTime );
+        console.log(state.value.openedChat)
+        
+        state.value.recentChats= [...chatDetails]; 
+      }
+      chatDetails.sort((a, b) => b.chatDetails.lastTime - a.chatDetails.lastTime );
+      },500)
       
 
    // ===============================================================================================
@@ -594,7 +634,7 @@ watch(
 
   
 
-  return { signUp, state,setFeedback,clearFeedback,logIn,uploadFile,saveUser,setFeedback,getByEmail,sendMessage,fetchRecentChats,getMessages}
+  return { signUp, state,setFeedback,clearFeedback,logIn,uploadFile,saveUser,setFeedback,getByEmail,sendMessage,fetchRecentChats,getMessages,reactMessage}
 })
 
 

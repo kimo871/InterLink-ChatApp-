@@ -8,6 +8,10 @@
   font-weight: normal;
 }
 
+.d-block{
+  display:block !important;
+}
+
 
 
 #app h2{

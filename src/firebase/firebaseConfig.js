@@ -28,7 +28,7 @@ console.log("env",import.meta.env)
 
 // Initialize Firebase
 const app = initializeApp(firebaseConfig);
-const analytics = getAnalytics(app);
+
 
 // const db = getFirestore(app);
 
@@ -43,4 +43,4 @@ setPersistence(auth, browserLocalPersistence)
 
   
 
-export {app,analytics,db,auth} 
+export {app,db,auth} 

@@ -10,7 +10,7 @@ const store = inject("storeProvider",{ state: { openedChat: null } })
 
 const loader = ref({status:false})
 
-;
+
 
 // Watch for changes in the openedChat property
 watch(
@@ -48,9 +48,5 @@ div.chatroom
   }
 }
 
-// @media(max-width:1100px){
-//   .chatroom{
-//     display:none !important
-//   }
-// }
+
 </style>

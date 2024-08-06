@@ -23,11 +23,31 @@ watch(
 );
 
 
+// // const handleClick = (e) => {
+// //   const parent = e.target.parentElement.parentElement;
+// //   const sibling = e.target.parentElement.parentElement.previousElementSibling;
+// //   console.log(sibling,parent)
+// //   if (parent) {
+// //     // Hide the parent element
+// //     parent.setAttribute("style","display:none !important");
+// // }
+
+// // if (sibling) {
+// //     // Show the sibling element
+// //     sibling.setAttribute("style","display:block !important");
+// // }
+
+  
+// }
+
+
 
 
 </script>
 <template lang="pug">
 div.chat-header
+    img(src="../assets/icons/angle-left.png" @click="handleClick")
+    | &nbsp; &nbsp; &nbsp;
     img(:src="chatInfo.img")
     h1.contact-name {{ chatInfo.name}}
 </template>
@@ -42,6 +62,14 @@ div.chat-header
     height: 50px;
     border-radius: 50%;
     margin-right: 10px;
+  }
+  // img:first-child{
+  //   cursor:pointer;
+  // }
+  i{
+    color:white;
+    font-size:15px;
+    cursor:pointer;
   }
 }
 </style>
