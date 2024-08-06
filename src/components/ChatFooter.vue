@@ -10,7 +10,7 @@ let fileValue = ref({})
 
 let file = ref({
   status:false,
-  fileName:null
+  content:null,
 })
 
 let showEmojis = ref(false)
@@ -19,16 +19,69 @@ const emojis =  ['😀', '😃', '😄', '😁', '😆', '😅', '😂', '🤣',
 
 const inputValue = ref("");
 
-const sendMessage = ()=>{
+const sendMessage = async()=>{
+  try{
   console.log(inputValue.value);
-  store.sendMessage(inputValue.value);
+  const res = await sendOption();
+  store.sendMessage(res);
+  //console.log(res);
+  }
+  catch(err){
+    console.log(err);
+  }
   inputValue.value="";
+  file.value = {status:null,content:null}
 }
 
+const sendOption = ()=>{
+
+    if(inputValue.value!=""){
+      console.log("inputext here..")
+      return inputValue.value;
+    }
+
+    else if(file.value.content){
+      // return new Promise((resolve,reject)=>{
+      //  console.log("file here..")
+      // const reader = new FileReader();
+      
+      // reader.onload = () => {
+      //  // console.log(reader.result);
+      //   resolve(reader.result);
+      // };
+
+      // reader.onerror = ()=>{
+      //   console.log("laaaaaaaaaa");
+      //   reject("error")
+      // }
+      
+      // reader.onerror = () => {
+      //   reject(null); // Reject if there's an error reading the file
+      // };
+      
+  //     // reader.readAsDataURL(file.value.content);
+  // })
+  return file.value.content;
+}
+    else {
+      console.log("rejected")
+      return null
+     
+    }
+ 
+}
+
+
+
 const handleFile = (e)=>{
-  inputValue.value = null;
-  console.log(e.target.files[0].name)
-  file.value = {status:true,name:e.target.files[0].name};
+  inputValue.value = "";
+  console.log(e.target.files[0])
+  if(!validateSizeFile(e.target.files[0]))alert(" Max File Size is 30 kb ! ")
+  file.value = {status:true,content:e.target.files[0]};
+}
+
+const validateSizeFile = (file)=>{
+   return  file.size/1024 <= 30
 }
 
 
@@ -40,7 +93,7 @@ div.chat-footer
     input(v-if="!file.status" type="text" id="message-text" placeholder="Enter Message..." v-model="inputValue" @focus="showEmojis=false")
     div.fileShower(v-if="file.status")
      i(class="fa-solid fa-file")
-     p {{ file.name }}
+     p {{ file.content.name }}
      .reset-wrapper 
       i(@click="()=>file={status:false,fileName:null}" class="fa-solid fa-circle-xmark")
     img(v-if="!file.status" :src="emoji" @click="()=>{showEmojis = !showEmojis}").emoji 

@@ -4,6 +4,8 @@ let store = inject("storeProvider",{});
 const { message, sender, time, isSent, isReceived, isRead } = defineProps({
   message: String,
   sender: String,
+  type: String,
+  download : String ,
   time: String,
   isSent: Boolean,
   isReceived: Boolean,
@@ -22,15 +24,28 @@ let me = 'Adel Shakal'
 </script>
 <template lang="pug">
 div.message(:class="{ 'message': sender.email != store.state.user.email, 'usr-msg': sender.email == store.state.user.email }")
+    //- i(class="fa-solid fa-face-smile")
     div.message-sender
       p {{ sender.name}}
     div.message-content
-      p {{ message }}
+      i(v-if="type=='file'" class='fa-solid fa-file')
+      p(v-else) {{ type }}
+      a(v-if="type=='file'"  :href="message" download) {{"download"}}
+     
     div.message-status
       p {{ getTime(time)[0] }}:{{ getTime(time)[1] }}
 </template>
 <style lang="scss" scoped>
 .message {
+  i{color:white;
+  //  position:absolute;
+  //  top:35%;
+  //  left:-25%;
+  // font-size:22px;
+  // cursor: pointer;
+
+}
+
   align-self: start;
   display: flex;
   justify-content: start;
@@ -59,9 +74,16 @@ div.message(:class="{ 'message': sender.email != store.state.user.email, 'usr-ms
   .message-content {
     width: 100%;
     border-radius: 10px;
+    display:flex;
+    justify-content:center;
+    align-items:center;
     p {
       padding: 5px;
       color: #f0f0f0;
+    }
+    i{
+      font-size:50px;
+      padding:10px;
     }
   }
   .message-sender {

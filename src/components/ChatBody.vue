@@ -58,7 +58,7 @@ let me = 'Adel Shakal'
 </script>
 <template lang="pug">
 .chat-body.scrollable
-    Message(v-for="message in (store.state.openedChat==null ? [] : Object.values(store.state.openedChat.messages) )" :key="message.time" v-bind="message"  :sender="message.sender" )
+    Message(v-for="message in (store.state.openedChat==null ? [] : Object.values(store.state.openedChat.messages) )" :key="message.time" :download="message.download" :type="message.type " v-bind="message"  :sender="message.sender" )
 </template>
 <style lang="scss">
 .chat-body {

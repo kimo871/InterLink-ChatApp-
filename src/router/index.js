@@ -4,12 +4,14 @@ import Login from "@/views/Login.vue"
 import SignUp from '@/views/SignUp.vue'
 import { getAuth, onAuthStateChanged } from 'firebase/auth';
 import {auth} from "../firebase/firebaseConfig"
+// 
+// console.log('test' , );
 
 const guardRoute =  async (to, from, next) => {
-  console.log('Entering beforeEnter guard');
   try {
     console.log(to)
     const user = await new Promise((resolve) => {
+    
       
       console.log('Waiting for auth state change');
       const unsubscribe = onAuthStateChanged(auth, (user) => {
@@ -22,14 +24,14 @@ const guardRoute =  async (to, from, next) => {
     if (user) {
       console.log('User is authenticated, proceeding to route');
       console.log("form url",from)
-      next(); 
+      next(to.meta.Auth)
     } else {
       console.log('User not authenticated, redirecting to signup');
-      next("/login");
+      next(to.meta.UnAuth);
     }
   } catch (error) {
     console.error('Error during authentication check:', error);
-    next("/login"); 
+    next(to.meta.UnAuth); 
   }
 }
 
@@ -41,23 +43,47 @@ const router = createRouter({
        {
       path:"/login",
       name:"login",
-      component : Login
+      component : Login,
+      meta : {
+        Auth : "/dashboard",
+        UnAuth : null
+      }
     },
     {
       path:"/signup",
       name:"signup",
-      component:SignUp
+      component:SignUp,
+      meta : {
+        Auth : "/dashboard",
+        UnAuth:null
+      }
     },
     {
       path:"/dashboard",
       name:"dashboard",
       component : Dashboard, 
-      beforeEnter: guardRoute
+      meta : {
+        Auth : null,
+        UnAuth: "/login"
+      }
 
     }
   ]
 })
 
+// router.beforeEach((to, form, next) => {
+//   const user = localStorage.getItem('firebase:authUser:AIzaSyCHHJuyWCrKHvXiYycrNYeHPaljHsvdyUw:[DEFAULT]');
+
+//   if (user ) {
+//     next()
+//   } else {
+//     next({name : 'login'})
+//   }
+
+// })
+
+
+router.beforeEach(guardRoute);
 
 
 

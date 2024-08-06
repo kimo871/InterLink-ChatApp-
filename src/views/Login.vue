@@ -16,28 +16,6 @@ let email = ref(null);
 
 let store = inject("storeProvider",{});
 
-onBeforeMount(async()=>{
-  try{
-  const user = await new Promise((resolve) => {
-      
-      console.log('Waiting for auth state change');
-      const unsubscribe = onAuthStateChanged(auth, (user) => {
-        console.log('Auth state changed:', user);
-        resolve(user);
-        unsubscribe(); 
-      });
-    });
-    if(user){
-      router.push("/dashboard")
-    }
-
-  }
-  catch(err){
-    console.log(err)
-  }
-})
-
-
 
 const handleSubmit=async(e)=>{
   console.log("kimo");
