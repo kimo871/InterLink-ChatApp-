@@ -11,6 +11,7 @@ const { message, sender, time, isSent, isReceived, isRead , chat,id,reaction } =
   sender: String | Object,
   type: String | undefined,
   download : String | undefined,
+  downloadName : String | undefined,
   time: Number|String,
   isSent: Boolean,
   isReceived: Boolean,
@@ -46,13 +47,13 @@ let me = 'Adel Shakal'
 </script>
 <template lang="pug">
 div.message(@click="(e)=>{showEmojis = !showEmojis}" :class="{ 'message': sender.email != store.state.user.email, 'usr-msg': sender.email == store.state.user.email }")
-    Emojis(:emojis="emojis" v-if="showEmojis" :click="handleReaction")
+    Emojis(:emojis="emojis" fontSize="22" v-if="showEmojis" :click="handleReaction")
     div.message-sender
       p {{ sender.name}}
     div.message-content
       i(v-if="type=='file'" class='fa-solid fa-file')
       p(v-else) {{ message }}
-      a(v-if="type=='file'"  :href="download" download) {{"download"}}
+      a(v-if="type=='file'"  :href="download" :download="downloadName") {{"download"}}
      
     div.message-status
       p {{ getTime(time)[0] }}:{{ getTime(time)[1] }}
@@ -61,19 +62,6 @@ div.message(@click="(e)=>{showEmojis = !showEmojis}" :class="{ 'message': sender
 <style lang="scss" scoped>
 .message {
   i{color:white;}
-  .emoji-wrapper{
-    
-    width: fit-content;
-    left: -125%;
-    background: #303841;
-    bottom: 100%;
-    padding: 5px 5px;
-    right: 10%;
-    border-radius: 5px;
-    box-shadow: 0px 2px 8px rgba(0, 0, 0, 0.2);
- 
-}
-    
   align-self: start;
   display: flex;
   justify-content: start;
@@ -85,6 +73,10 @@ div.message(@click="(e)=>{showEmojis = !showEmojis}" :class="{ 'message': sender
   padding: 5px;
   border-radius: 5px;
   position:relative;
+  .emoji-wrapper{
+    right:-80%;
+    top:30%;
+  }
   &::before {
     border-bottom: 5px solid transparent;
     border-left: 5px solid #7269ef;
@@ -135,10 +127,14 @@ div.message(@click="(e)=>{showEmojis = !showEmojis}" :class="{ 'message': sender
       top: 70%;
       position: absolute;
       left: 80%;
+      font-size:20px;
     }
   }
 }
 .usr-msg {
+  .emoji-wrapper{
+    left: -125%;
+}
   background-color: #303841;
   color: white;
   align-self: end;
@@ -167,10 +163,12 @@ div.message(@click="(e)=>{showEmojis = !showEmojis}" :class="{ 'message': sender
 }
 
 .emoji-wrapper{
-  position: absolute;
     width: fit-content;
-    height: 40px;
-    top: 30%;
+    background: #303841;
+    padding: 5px 5px;
+    position:absolute;
+    border-radius: 5px;
+    box-shadow: 0px 2px 8px rgba(0, 0, 0, 0.2);
     .emoji-card{
       padding:12px;
       width:10px;
@@ -179,9 +177,10 @@ div.message(@click="(e)=>{showEmojis = !showEmojis}" :class="{ 'message': sender
       cursor:pointer;
       font-size:20px;
       display:inline-block;
-      &:hover {
+      
+}
+    &:hover {
       background-color: #6159cb28;
     }
-}
 }
 </style>

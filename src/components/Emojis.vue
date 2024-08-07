@@ -7,6 +7,10 @@ defineProps({
     emojis:{
         type:Array,
         required:true
+    },
+    fontSize:{
+        type:String,
+        required:true
     }
 })
 
@@ -14,7 +18,7 @@ defineProps({
 
 <template lang="pug">
 .emoji-wrapper
- span(v-for="emoji in emojis" class="emoji-card" @click="()=>click(emoji)") {{ emoji }}
+ span(v-for="emoji in emojis" :style="{ 'font-size': fontSize+'px' }"  class="emoji-card" @click="()=>click(emoji)") {{ emoji }}
 </template>
 
 <style lang="scss">
@@ -23,7 +27,6 @@ defineProps({
     height: 100%;
     text-align: center;
     cursor: pointer;
-    font-size: 22px;
     &:hover {
       background-color: #6159cb28;
     }

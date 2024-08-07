@@ -3,6 +3,7 @@ import { initializeApp } from "firebase/app";
 import { getAnalytics } from "firebase/analytics";
 import { getFirestore , getDocs , collection } from "firebase/firestore";
 import { getDatabase } from "firebase/database";
+import {getStorage} from "firebase/storage"
 
 import { getAuth, setPersistence, browserLocalPersistence } from 'firebase/auth';
 
@@ -35,6 +36,7 @@ const app = initializeApp(firebaseConfig);
 const auth = getAuth(app);
 
 const db = getDatabase(app);
+const store = getStorage(app,import.meta.env.VITE_APP_FIREBASE_STORAGE_BUCKET);
 
 setPersistence(auth, browserLocalPersistence)
   .catch((error) => {
@@ -43,4 +45,4 @@ setPersistence(auth, browserLocalPersistence)
 
   
 
-export {app,db,auth} 
+export {app,db,auth,store} 

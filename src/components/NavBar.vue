@@ -116,4 +116,8 @@ div.navbar
     }
   }
 }
+
+@media(max-width:1200px){
+  .navbar{width:10%;}
+}
 </style>

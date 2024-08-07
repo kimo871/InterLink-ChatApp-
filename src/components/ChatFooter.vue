@@ -83,7 +83,7 @@ div.chat-footer
      .reset-wrapper 
       i(@click="()=>file={status:false,fileName:null}" class="fa-solid fa-circle-xmark")
     img(v-if="!file.status" :src="emoji" @click="()=>{showEmojis = !showEmojis}") 
-    Emojis(v-if="showEmojis"  :click="clickEmoji"  :emojis="emojis")
+    Emojis(v-if="showEmojis"  fontSize="30" :click="clickEmoji"  :emojis="emojis")
     //- .emoji-wrapper(v-if="showEmojis")
     //-  span(v-for="emoji in emojis" class="emoji-card" @click="()=> clickEmoji(emoji)") {{ emoji }}
     div.input-wrapper
@@ -204,13 +204,13 @@ div.chat-footer
     right: 10%;
     border-radius: 5px;
     box-shadow: 0px 2px 8px rgba(0, 0, 0, 0.2); 
-    .emoji-card{
+    span{
       margin-top:5px;
       width:25%;
       height:25%;
       text-align:center;
       cursor:pointer;
-      font-size:30px;
+      font-size:30px !important;
       display:inline-block;
       &:hover {
       background-color: #6159cb28;

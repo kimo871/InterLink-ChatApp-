@@ -36,4 +36,11 @@ div.sidebar
 }
 
 
+@media(max-width:1200px){
+  .sidebar{
+    width:90%;
+  }
+}
+
+
 </style>

@@ -21,7 +21,6 @@ const handleOpen = ()=> show_container.value = true;
 Modal(v-if="show_container"  @close="handleClose")
 div.container
     NavBar
-    
     SideBar(title="chats" @open="handleOpen" )
     ChatRoom
 </template>

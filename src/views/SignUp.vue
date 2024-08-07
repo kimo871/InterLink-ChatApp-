@@ -111,63 +111,52 @@ const handleSubmit=(e)=>{
 
 </script>
 
-<template >
+<template lang="pug" >
 
- <div class="wrapper"><img width="200" src="./logo.png" alt="..." />
-    <div class="brand_container">
-        <h2>Sign up </h2>
-        <p class="slogan">Get your Chatvia account now.</p>
-    </div>
- 
- <Form :handleSubmit="handleSubmit" :feedback="store.state.feedback" >
-    <div class="field-wrapper">
-      <label for="temp">Profile Photo</label>
-      <div class="avatar-wrapper">
-        <input :disabled="disabled" type="file" accept="image/*" id="image" name="image" hidden @change="handleImageUpload"  />
-        <label for="image">
-            <img :src="image"/>
-            <div @mouseenter="disabled= true" v-if="show" class="action-wrapper">
-            <i @click="removeImage" class="fa-solid fa-trash"></i>
-        </div>
-        </label>
-        
-    </div>
-    </div>
-
-    <div class="field-wrapper">
-      <label for="email">Full Name </label>
-      <div class="input-wrapper">
-        <i class="fa-solid fa-user"></i>
-        <input type="text" autocomplete="off" placeholder="Enter your Name..." name="name" value="" /></div>
-    </div>
-
-    <div class="field-wrapper">
-      <label for="email">Email</label>
-      <div class="input-wrapper">
-        <i class="fa-solid fa-envelope"></i>
-        <input type="text" autocomplete="off" placeholder="Enter your email..." name="email" value="" /></div>
-    </div>
-    
-    <div class="field-wrapper">
-      <label for="password">Password</label>
-      <div class="input-wrapper"><i class="fa-solid fa-eye"></i><input type="password" autocomplete="off" @change="()=&gt; console.log('dd')" placeholder="Enter your password..." name="password" /></div>
-    </div>
-    
-    <div class="field-wrapper">
-     <div class="input-wrapper">
-        <input type="submit" value="Submit" />
-     </div>
-     <p>By registering you agree to the Chatvia <a>Terms of Use</a></p>
-    </div>
-
- </Form>
-
- <div class="rest_container">
-    <p> <em>Already have an account ?</em><RouterLink to="login"> Signin </RouterLink></p>
-    <p> </p><span> © 2024 Interlink. Crafted With <i class="fa-solid fa-heart"> </i>&nbsp; And Coffee</span>
- </div>
-
-</div>
+.wrapper
+  img(width='200' src='./logo.png' alt='...')
+  .brand_container
+    h2 Sign up 
+    p.slogan Get your Chatvia account now.
+  Form(:handleSubmit='handleSubmit' :feedback='store.state.feedback')
+    .field-wrapper
+      label(for='temp') Profile Photo
+      .avatar-wrapper
+        input#image(:disabled='disabled' type='file' accept='image/*' name='image' hidden='' @change='handleImageUpload')
+        label(for='image')
+          img(:src='image')
+          .action-wrapper(@mouseenter='disabled= true' v-if='show')
+            i.fa-solid.fa-trash(@click='removeImage')
+    .field-wrapper
+      label(for='email') Full Name 
+      .input-wrapper
+        i.fa-solid.fa-user
+        input(type='text' autocomplete='off' placeholder='Enter your Name...' name='name' value='')
+    .field-wrapper
+      label(for='email') Email
+      .input-wrapper
+        i.fa-solid.fa-envelope
+        input(type='text' autocomplete='off' placeholder='Enter your email...' name='email' value='')
+    .field-wrapper
+      label(for='password') Password
+      .input-wrapper
+        i.fa-solid.fa-eye
+        input(type='password' autocomplete='off' @change="()=> console.log('dd')" placeholder='Enter your password...' name='password')
+    .field-wrapper
+      .input-wrapper
+        input(type='submit' value='Submit')
+      p
+        | By registering you agree to the Chatvia 
+        a Terms of Use
+  .rest_container
+    p
+      em Already have an account ?
+      routerlink(to='login')  Signin 
+    p  
+    span
+      | &copy; 2024 Interlink. Crafted With 
+      i.fa-solid.fa-heart  
+      | &nbsp; And Coffee
        
 </template>
 

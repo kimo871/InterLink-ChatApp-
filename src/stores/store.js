@@ -1,7 +1,7 @@
 import { ref as useState, watch } from 'vue'
 import { defineStore } from 'pinia'
 import { getAuth, createUserWithEmailAndPassword , signInWithEmailAndPassword , updateProfile } from "firebase/auth";
-import {auth,db} from "../firebase/firebaseConfig"
+import {auth,db,store} from "../firebase/firebaseConfig"
 import {getStorage,ref as storageRef,uploadBytes,getDownloadURL } from "firebase/storage"
 import { ref , set , get , child , push,update,onValue,onChildChanged} from 'firebase/database';
 import { debounce } from 'lodash';
@@ -66,7 +66,7 @@ watch(
   () => state.value.recentChats,
   (newMsg) => {
     if (newMsg) {
-      console.log(state.value.recentChats);
+      console.log(state.value.recentChats,"rt");
       // 1000 milliseconds = 1 second
     }
   },
@@ -83,7 +83,7 @@ watch(
   
     const signUp =  async (userData)=>{
       try{
-      state.value.loading=true;
+      //state.value.loading=true;
       const credentials = await createUserWithEmailAndPassword(auth,userData.email,userData.password);
       return credentials;
     }
@@ -213,10 +213,13 @@ watch(
 
           const snapshot =  await get(childRef);
 
-          
 
           if(snapshot.exists()){
             const user = snapshot.val();
+            let result = await checkChat(state.value.user.email,userEmail);
+            if(result){
+              getMessages(result);
+            }
             state.value.feedback={
               status:200,
               msg:"Account Found"
@@ -248,11 +251,11 @@ watch(
 
    // ===============================================================================================
 
-      const checkChat = async()=>{
+      const checkChat = async(email1,email2)=>{
         try{
-        let chatRef1 = ref(db,`userChats/${state.value.user.email.replace(/\./g, ',')}`)
+        let chatRef1 = ref(db,`userChats/${email1.replace(/\./g, ',')}`)
 
-        let chatRef2 = ref(db,`userChats/${state.value.openedChat.userData.email.replace(/\./g, ',')}`)
+        let chatRef2 = ref(db,`userChats/${email2.replace(/\./g, ',')}`)
 
 
         const snapshot = await get(chatRef1);
@@ -309,12 +312,12 @@ watch(
       console.log("here.......",msg)
       
         try{
-          let answer = await checkChat();
+          let answer = await checkChat(state.value.user.email,state.value.openedChat.userData.email);
 
           console.log(answer)
 
           if(!answer){
-          answer = await createChat();
+          answer = await createChat(state.value.user.email,state.value.openedChat.userData.email);
           } 
 
           await createMessage(answer,msg);
@@ -400,13 +403,14 @@ watch(
 
           let domain =  import.meta.env.VITE_APP_FIREBASE_URL+"/v0/b/"+import.meta.env.VITE_APP_FIREBASE_STORAGE_BUCKET
           
-          console.log(domain,"ww")
+          console.log(result,"ww",domain)
 
           const message = {
             id : newMsgRef.key,
             message : msg.type ? "Sent A file" : msg ,
             type : msg.type ?  "file" : "text",
-            download : msg.type ? result : null,
+            download : result.replace(domain,""),
+            downloadName : msg.type ? msg.name : null,
             time : Date.now(),
             readBy:null,
             sender: {email:state.value.user.email,name:state.value.user.displayName,photoURL:state.value.user.photoURL}, // Example additional field
@@ -444,9 +448,6 @@ watch(
           let messages = dataRef.val();
           console.log(Object.values(messages));
           for ( let [key,item] of Object.entries(dataRef.val())){
-            //let userRef = ref(db,`users/${item.sender.email.replace(/\./g, ',')}`);
-            //let userData = await get(userRef);
-            //userData = userData.val();
             result[key]=item;
           }
           
@@ -576,7 +577,7 @@ watch(
         console.log("message added")
         const messages = messageSnapshot.val();
         console.log(messages)
-        if(state.value.openedChat.messages){
+        if(state.value.openedChat?.messages){
           console.log("jorray")
          state.value.openedChat.messages = messages;
         }
@@ -598,41 +599,6 @@ watch(
       chatDetails.sort((a, b) => b.chatDetails.lastTime - a.chatDetails.lastTime );
       },500)
       
-
-   // ===============================================================================================
-  
-  
-
-
-  // const getChatDetails = async (chatId) => {
-  //   try {
-  //     const chatRef = ref(db, `chats/${chatId}`);
-  //     const chatSnapshot = await get(chatRef);
-  
-  //     if (chatSnapshot.exists()) {
-  //       const chatData = chatSnapshot.val();
-  //       // Fetch the last message
-  //       const messagesRef = ref(db, `chats/${chatId}/messages`);
-  //       const messagesSnapshot = await get(messagesRef);
-  //       const messages = messagesSnapshot.val();
-  //       const lastMessage = messages ? Object.values(messages).pop() : null; // Get the last message
-  
-  //       return {
-  //         chatId,
-  //         participants: chatData.participants,
-  //         lastMessage,
-  //       };
-  //     } else {
-  //       return null; // Chat not found
-  //     }
-  //   } catch (err) {
-  //     console.error('Error fetching chat details:', err);
-  //     return null;
-  //   }
-  // };
-  
-
-  
 
   return { signUp, state,setFeedback,clearFeedback,logIn,uploadFile,saveUser,setFeedback,getByEmail,sendMessage,fetchRecentChats,getMessages,reactMessage}
 })

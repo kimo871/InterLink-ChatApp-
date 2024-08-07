@@ -49,4 +49,11 @@ div.chatroom
 }
 
 
+@media(max-width:1200px){
+  .chatroom{
+    display:none !important ;
+  }
+}
+
+
 </style>
