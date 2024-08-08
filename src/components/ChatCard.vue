@@ -12,18 +12,23 @@ const props = defineProps({
 const emit = defineEmits(['activate'])
 
 const handleClick = (e) => {
-//   const parent = e.target.closest(".sidebar");
-//   const sibling = parent.nextElementSibling;
-//   console.log(sibling,parent)
-//   if (parent) {
-//     // Hide the parent element
-//     parent.setAttribute("style","display:none !important");
-// }
+  const parent = e.target.closest(".sidebar");
+  const sibling = parent.nextElementSibling;
+  const sibling2 = parent.previousElementSibling;
+  console.log(sibling,parent)
+  if (parent) {
+    // Hide the parent element
+    parent.setAttribute("style","display:none !important");
+}
 
-// if (sibling) {
-//     // Show the sibling element
-//     sibling.setAttribute("style","display:block !important");
-// }
+if (sibling) {
+    // Show the sibling element
+    sibling.setAttribute("style","display:block !important");
+}
+
+if(sibling2){
+  sibling2.setAttribute("style","display:none !important");
+}
 
   emit('activate', props.index)
 }

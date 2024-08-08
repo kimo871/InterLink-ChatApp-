@@ -23,22 +23,26 @@ watch(
 );
 
 
-// // const handleClick = (e) => {
-// //   const parent = e.target.parentElement.parentElement;
-// //   const sibling = e.target.parentElement.parentElement.previousElementSibling;
-// //   console.log(sibling,parent)
-// //   if (parent) {
-// //     // Hide the parent element
-// //     parent.setAttribute("style","display:none !important");
-// // }
+const handleClick = (e) => {
+const parent = e.target.parentElement.parentElement;
+const sibling = e.target.parentElement.parentElement.previousElementSibling;
+const sibling2 = e.target.parentElement.parentElement.previousElementSibling.previousElementSibling;
+  console.log(sibling,parent)
+  if (parent) {
+    // Hide the parent element
+    parent.setAttribute("style","display:none !important");
+}
 
-// // if (sibling) {
-// //     // Show the sibling element
-// //     sibling.setAttribute("style","display:block !important");
-// // }
+if (sibling) {
+    // Show the sibling element
+    sibling.setAttribute("style","display:block !important");
+}
 
+if(sibling2){
+  sibling2.setAttribute("style","display:block !important");
+}
   
-// }
+}
 
 
 

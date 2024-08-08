@@ -151,7 +151,7 @@ const handleSubmit=(e)=>{
   .rest_container
     p
       em Already have an account ?
-      routerlink(to='login')  Signin 
+      RouterLink(to='login')  Signin 
     p  
     span
       | &copy; 2024 Interlink. Crafted With 

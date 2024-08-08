@@ -159,9 +159,12 @@ let store = inject("storeProvider",{})
 
 
 
-@media(max-width:1400px){
+@media(max-width:1200px){
   form{
     width:90% !important;
+    .field-wrapper{
+        width:100%;
+    }
    
   }
 }
