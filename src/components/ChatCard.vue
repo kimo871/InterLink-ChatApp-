@@ -23,7 +23,7 @@ const handleClick = (e) => {
 
 if (sibling) {
     // Show the sibling element
-    sibling.setAttribute("style","display:block !important");
+    sibling.setAttribute("style","display:flex !important");
 }
 
 if(sibling2){

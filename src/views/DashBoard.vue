@@ -29,7 +29,8 @@ div.container
 .container {
   display: flex;
   justify-content: start;
-  height: 100vh;
+  max-height: 100vh;
+  height:100vh;
   div {
     display: flex;
     justify-content: start;

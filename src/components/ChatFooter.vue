@@ -98,13 +98,14 @@ div.chat-footer
 
 .chat-footer {
   position:relative;
-  height: 12%;
+  min-height: 12%;
+  max-width:100%;
   display: flex;
   align-items: center;
   justify-content: start;
   gap: 3%;
   input {
-    min-width: 50%;
+    max-width: 75%;
     width: 75%;
     border: none;
     padding: 0 20px;
@@ -117,6 +118,16 @@ div.chat-footer
     margin: 0 10px;
     justify-content: center;
     align-items: center;
+  }
+
+  .file-shower{
+    max-width:75%;
+    width:75%;
+    p{
+      overflow: hidden;        /* Hide any overflow content */
+      white-space: nowrap;     /* Prevent text from wrapping */
+      text-overflow: ellipsis; /* Display ellipsis when content overflows */
+    }
   }
   img {
     cursor: pointer;
