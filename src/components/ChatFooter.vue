@@ -120,9 +120,10 @@ div.chat-footer
     align-items: center;
   }
 
-  .file-shower{
+  .fileShower{
     max-width:75%;
     width:75%;
+    height: 12%;
     p{
       overflow: hidden;        /* Hide any overflow content */
       white-space: nowrap;     /* Prevent text from wrapping */
