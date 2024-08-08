@@ -105,8 +105,8 @@ div.chat-footer
   justify-content: start;
   gap: 3%;
   input {
-    max-width: 75%;
-    width: 75%;
+    max-width: 70%;
+    width: 70%;
     border: none;
     padding: 0 20px;
     font-size: 1rem;
@@ -120,16 +120,7 @@ div.chat-footer
     align-items: center;
   }
 
-  .fileShower{
-    max-width:75%;
-    width:75%;
-    height: 12%;
-    p{
-      overflow: hidden;        /* Hide any overflow content */
-      white-space: nowrap;     /* Prevent text from wrapping */
-      text-overflow: ellipsis; /* Display ellipsis when content overflows */
-    }
-  }
+ 
   img {
     cursor: pointer;
     width: 50px;
@@ -171,7 +162,14 @@ div.chat-footer
                 }
 
   .fileShower{
-    width:100%;
+    max-width:70%;
+    width:70%;
+    height: 12%;
+    p{
+      overflow: hidden;        /* Hide any overflow content */
+      white-space: nowrap;     /* Prevent text from wrapping */
+      text-overflow: ellipsis; /* Display ellipsis when content overflows */
+    }
     display:flex;
     align-items: center;
     i{font-size:35px; color:white; margin:20px 20px;}
