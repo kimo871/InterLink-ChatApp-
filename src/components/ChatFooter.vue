@@ -183,6 +183,11 @@ div.chat-footer
    
   }
 
+  .input-wrapper{
+    width:25%;
+    padding:0 20px;
+  }
+
 
 /* Styling the scrollbar */
 .emoji-wrapper::-webkit-scrollbar {
