@@ -1,0 +1,142 @@
+
+
+.chat-footer {
+  position:relative;
+  min-height: 12%;
+  max-width:100%;
+  width:95%;
+  display: flex;
+  align-items: center;
+  justify-content: start;
+  gap: 3%;
+  input[type="text"] {
+    max-width: 80%;
+    width: 80%;
+    border: none;
+    padding: 0 20px;
+    font-size: 1rem;
+    border-radius: 5px;
+    background-color: #303841;
+    color: #a6b0cf;
+    min-height: 60%;
+    margin: 0 10px;
+    justify-content: center;
+    align-items: center;
+  }
+
+  & .emoji-wrapper{
+    position: absolute;
+    display:flex;
+    flex-wrap:wrap;
+    width:55%;
+    height: 300px;
+    overflow-y:scroll;
+    background: #303841;
+    bottom: 100%;
+    padding:5px 5px;
+    right: 10%;
+    border-radius: 5px;
+    box-shadow: 0px 2px 8px rgba(0, 0, 0, 0.2); 
+    @media(max-width:1200px){
+      width:75%;
+    }
+    span{
+      margin-top:5px;
+      width:10%;
+      height:25%;
+      text-align:center;
+      cursor:pointer;
+      font-size:30px !important;
+      display:inline-block;
+      &:hover {
+      background-color: #6159cb28;
+    }
+    }
+}
+
+ 
+  img {
+    cursor: pointer;
+    width: 50px;
+    height: 50px;
+    padding: 15px;
+    background-color: #6159cb00;
+    &:hover {
+      background-color: #6159cb28;
+    }
+  }
+  .send-button {
+    padding: 0px;
+    &:hover {
+      opacity: 0.8;
+    }
+  }
+}
+
+.avatar-wrapper{
+                @include perfect-center;
+
+                label{
+                    position:relative;
+                    top:0px;
+                    width:9rem;
+                    height:9rem;;
+                    border-radius:50%;
+                    cursor:pointer; 
+                    img{
+                        position:absolute;
+                        top:0px;
+                        width:100%;
+                        height:100%;
+                        border-radius:50%;
+                    }
+
+                  }
+
+                }
+
+  .fileShower{
+    max-width:80%;
+    width:80%;
+    height: 12%;
+    p{
+      overflow: hidden;        /* Hide any overflow content */
+      white-space: nowrap;     /* Prevent text from wrapping */
+      text-overflow: ellipsis; /* Display ellipsis when content overflows */
+    }
+    display:flex;
+    align-items: center;
+    i{font-size:35px; color:white; margin:20px 20px;}
+    .reset-wrapper{
+      i{color: red;
+         cursor:pointer;}
+      display:flex;
+      justify-content:flex-end;
+      width:100%;
+    }
+   
+  }
+
+ 
+
+
+/* Styling the scrollbar */
+.emoji-wrapper::-webkit-scrollbar {
+  width: 10px;
+}
+
+.emoji-wrapper::-webkit-scrollbar-track {
+  background-color: #f1f1f1; /* Color of the track */
+}
+
+.emoji-wrapper::-webkit-scrollbar-thumb {
+  background-color: #888; /* Color of the scroll thumb */
+  border-radius: 5px; /* Rounded corners */
+}
+
+.emoji-wrapper::-webkit-scrollbar-thumb:hover {
+  background-color: #555; /* Hover color of the scroll thumb */
+}
+
+
+ 

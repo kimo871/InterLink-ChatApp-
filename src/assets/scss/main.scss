@@ -1,0 +1,30 @@
+// main.scss
+
+// Import global variables and mixins
+
+@import 'mixins';
+
+@import './base/variables';
+
+// Import global styles
+
+
+// Import component styles
+@import 'components/sidebar';
+@import 'components/chatBody';
+@import 'components/chatCard';
+@import 'components/chatEmpty';
+@import 'components/chatFooter';
+@import 'components/chatFooter';
+@import 'components/chatHeader';
+@import 'components/chatRoom';
+
+@import 'components/emojis';
+@import 'components/form';
+@import 'components/message';
+@import 'components/modal';
+@import 'components/navbar';
+@import 'components/profile';
+
+@import 'components/chatlist';
+

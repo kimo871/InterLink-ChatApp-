@@ -1,0 +1,139 @@
+.message {
+    i {
+      color: white;
+    }
+  
+    align-self: start;
+    display: flex;
+    justify-content: start;
+    align-items: center;
+    background-color: #7269ef;
+    flex-direction: column;
+    width: fit-content;
+    min-width: 120px;
+    padding: 5px;
+    border-radius: 5px;
+    position: relative;
+  
+    & .emoji-wrapper {
+      position: absolute;
+      right: -80%;
+      top: 30%;
+      width: fit-content;
+      background: #303841 !important;
+      padding: 5px;
+      border-radius: 5px;
+      box-shadow: 0px 2px 8px rgba(0, 0, 0, 0.2);
+  
+      & .emoji-card {
+        width: 31px;
+        height: fit-content;
+        text-align: center;
+        cursor: pointer;
+        font-size: 20px;
+        display: inline-block;
+      }
+  
+      &:hover {
+        background-color: #6159cb28;
+      }
+    }
+  
+    
+    .message-content {
+      width: 100%;
+      border-radius: 10px;
+      display: flex;
+      align-items: center;
+  
+      p {
+        padding: 5px;
+        color: #f0f0f0;
+      }
+  
+      i {
+        font-size: 50px;
+        padding: 10px;
+      }
+    }
+  
+    .message-sender {
+      width: 100%;
+      display: flex;
+      justify-content: start;
+      padding: 5px;
+  
+      p {
+        color: #283157;
+        font-weight: bold;
+      }
+    }
+  
+    .message-status {
+      position: relative;
+      width: 100%;
+      display: flex;
+      justify-content: end;
+  
+      p {
+        color: #abb4d2;
+      }
+  
+      span.reaction {
+        position: absolute;
+        top: 70%;
+        left: 80%;
+        font-size: 20px;
+      }
+    }
+  
+    &:hover i.fa-face-smile {
+      visibility: visible;
+    }
+  }
+
+  .receiver-msg{
+    &::before {
+      content: '';
+      position: absolute;
+      bottom: -7px;
+      left: 0 !important;
+      width: 10px;
+      height: 10px;
+      border: 5px solid transparent;
+      border-left-color: #7269ef;
+      border-top-color: #7269ef;
+      border-right-color: transparent;
+      border-bottom-color: transparent;
+    }
+  
+  }
+  
+  .usr-msg {
+    background-color: #303841;
+    color: white;
+    align-self: end;
+  
+    .emoji-wrapper {
+      position: absolute;
+      left: -125%;
+    }
+  
+    &::before {
+      content: '';
+      position: absolute;
+      bottom: -7px;
+      right: 0 !important;
+      width: 10px;
+      height: 10px;
+      border: 5px solid transparent;
+      border-left-color: transparent;
+      border-top-color: #303841;
+      border-right-color: #303841;
+      border-bottom-color: transparent;
+    }
+  
+    .message-sender {
+      display: none;
+    }
+  }

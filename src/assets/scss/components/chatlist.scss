@@ -1,0 +1,65 @@
+.chatlist {
+    width: 100%;
+    background-color: #303841;
+    display:flex;
+    align-items: center;
+    flex-direction: column;
+    text-align: center;
+    gap:10px;
+    overflow-y:scroll;
+
+    .add-chat {
+      position: absolute;
+      right: 20px;
+      bottom: 50px;
+      width: 50px;
+      height: 50px;
+      cursor: pointer;
+      &:hover {
+        transform: scale(1.1);
+      }
+    }
+
+    h1 {
+      color: white;
+    }
+    .search-bar {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      background-color: rgb(54, 64, 74);
+      padding: 10px;
+      width: 100%;
+      border-radius: 5px;
+      img {
+        width: 20px;
+        height: 20px;
+      }
+      input {
+        width: 100%;
+        height: 30px;
+        border: none;
+        border-radius: 5px;
+        background-color: rgb(54, 64, 74);
+        color: white;
+        &:focus {
+          outline: none;
+        }
+      }
+    }
+  }
+  
+  .actions-wrapper{
+    display:flex;
+    justify-content:space-between;
+    width:100%;
+    gap:10px;
+    i{width:10%; background:var(--color-primary);  
+      border: none;
+      border-radius: 5px;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      font-size: 22px;
+      cursor:pointer}
+  }

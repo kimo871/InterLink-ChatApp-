@@ -1,0 +1,78 @@
+@import './base.css';
+
+#app {
+  width: 100%;
+  /* max-width: 1280px; */
+  max-height:100vh;
+  height:100vh;
+  margin: 0 auto;
+  padding: 0;
+  font-weight: normal;
+}
+
+#app h2 {
+  font-size: 28px;
+}
+
+#app p {
+  font-size: 17px;
+}
+
+::-webkit-scrollbar {
+  width: 8px;
+}
+::-webkit-scrollbar-thumb {
+  border-radius: 6px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: #555;
+}
+
+.feedback {
+  color: white;
+  padding: 9px 12px;
+  border-radius: 6px;
+  margin: 5px 0px;
+  transition: 0.4 ease-in-out;
+  opacity: 1;
+}
+
+a {
+  text-decoration: none;
+  color: var(--color-primary);
+  transition: 0.4s;
+  padding: 3px;
+}
+
+@media (min-width: 1024px) {
+  body {
+    display: flex;
+    place-items: center;
+  }
+
+  #app {
+    font-family:
+      Public Sans,
+      sans-serif;
+  }
+}
+.contact-name {
+  font-weight: 600;
+  font-size: 1rem;
+  color: white;
+  overflow-x: hidden;
+  text-overflow: ellipsis;
+}
+.scrollable {
+  overflow-y: scroll;
+  height: 100%;
+}
+.scrollable::-webkit-scrollbar {
+  width: 8px;
+}
+.scrollable::-webkit-scrollbar-thumb {
+  border-radius: 6px;
+}
+.scrollable::-webkit-scrollbar-thumb:hover {
+  background: #555;
+}

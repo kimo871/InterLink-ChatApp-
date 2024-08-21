@@ -1,0 +1,76 @@
+$navbar-bg-color: #36404a;
+$logout-bg-color: #0b0b0b71;
+$icon-bg-color: #36404a00;
+$active-icon-bg-color: #7269ef;
+$hover-color: #0b0b0b71;
+$icon-size: 50px;
+$icon-padding: 10px;
+$icon-img-size: 30px;
+$profile-avatar-border-radius: 50%;
+
+.navbar {
+  display: flex;
+  align-items: center;
+  min-width: 65px;
+  width: 5%;
+  background-color: $navbar-bg-color;
+  padding: 15px 0;
+  gap: 20%;
+
+  img {
+    width: $icon-size;
+    height: $icon-size;
+    cursor: pointer;
+  }
+
+  img.profile-avatar {
+    border-radius: $profile-avatar-border-radius;
+  }
+
+  .log-out {
+    border-radius: 5px;
+    padding: 5px;
+    background-color: transparent;
+    cursor: pointer;
+    
+    &:hover {
+      background-color: $logout-bg-color;
+    }
+  }
+
+  ul.icons-container {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    height: 40%;
+    padding: 0;
+    gap: 20%;
+
+    li {
+      list-style: none;
+      cursor: pointer;
+      background-color: $icon-bg-color;
+      border-radius: 5px;
+      width: $icon-size;
+      height: $icon-size;
+      padding: $icon-padding;
+
+      &:hover {
+        background-color: $color-primary;
+      }
+
+      img {
+        width: $icon-img-size;
+        height: $icon-img-size;
+      }
+    }  
+  }
+}
+
+@media(max-width:1200px){
+  .navbar{width:15%;}
+}
+
+
+

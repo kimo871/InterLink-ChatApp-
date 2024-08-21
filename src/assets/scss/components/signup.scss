@@ -1,0 +1,22 @@
+.wrapper {
+    width: inherit;
+    min-height: 92vh;
+    @include perfect-center;
+    flex-direction: column;
+    color: var(--color-primary-white);
+    gap: 2em;
+  
+    .slogan {
+      color: var(--color-text-secondary);
+      font-size: 18px;
+    }
+  
+    .brand_container {
+      text-align: center;
+    }
+  
+    .rest_container {
+      color: var(--color-text-secondary);
+      line-height: 1.9;
+    }
+  }

@@ -1,0 +1,12 @@
+.chatroom {
+  width: 70%;
+  gap: 0.2%;
+  background-color: #262e35;
+
+  @media (max-width: 1200px) {
+    display: none !important;
+    width: 100%;
+  }
+}
+
+  
