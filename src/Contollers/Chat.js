@@ -13,7 +13,10 @@ class ChatController {
         this.strategies.set('groups', GroupChatController);
         this.strategies.set('chats',  DirectChatController);
         this.store = store;
-        this.setStrategy(strategy);    
+        this.setStrategy(strategy);  
+        this.debouncedListenRecentMessages = debounce(async (chatId, messageSnapshot, chatDetails) => {
+           await this.listenRecentMessages(chatId, messageSnapshot, chatDetails);
+       }, 700); // Adjust debounce delay as needed  
     }
 
     setStrategy(strategy) {
@@ -148,6 +151,8 @@ addChatListener(chatId) {
     }
 }
 
+
+
 async listenRecentMessages(chatId, messageSnapshot, chatDetails) {
     // Flag to indicate that updates are in progress
     this.store.state.isUpdating = true;
@@ -174,8 +179,9 @@ async listenRecentMessages(chatId, messageSnapshot, chatDetails) {
             const userEmail = this.store.state.user.email.replace(/\./g, ',');
             console.log(this.store.state.openedChat?.chatId,chatId)
             if (this.store.state.openedChat?.chatId !== chatId) {
+                console.log(chatDetails[existingChatIndex].userDetails.unread,newMessages.length)
                 // Update unread count by the number of new messages if the chat is not open
-                chatDetails[existingChatIndex].userDetails.unread = (chatDetails[existingChatIndex].userDetails.unread || 0) + newMessages.length;
+                chatDetails[existingChatIndex].userDetails.unread = (this.store.state.recentChats[existingChatIndex].userDetails.unread || 0) + newMessages.length;
             } else {
                 // Update the opened chat with new messages
                 this.store.state.openedChat.messages = messages;
@@ -246,10 +252,12 @@ async fetchRecentChats() {
                             const chatData = detailsSnapshot.val();
                             const additionalData = await this.strategy.additionalDetails(chatData, userEmail);
 
+                            
+
                             if (!this.store.state.messageListeners[chatId]) {
                                 const messageRef = ref(db, `messages/${chatId}`);
                                 this.store.state.messageListeners[chatId] = onValue(messageRef, async (messageSnapshot) => {
-                                    debounce(this.listenRecentMessages(chatId, messageSnapshot, chatDetails),400);
+                                    this.debouncedListenRecentMessages(chatId, messageSnapshot, chatDetails);
                                 });
                             }
 
@@ -279,7 +287,7 @@ async fetchRecentChats() {
             } else {
                 this.store.state.recentChats = []; 
             }
-        }, 400); // Adjust debounce delay as needed (e.g., 200ms)
+        }, 700); // Adjust debounce delay as needed (e.g., 200ms)
 
         const chatListener = onValue(userChatsRef, handleUpdates);
         this.store.state.chatListener = chatListener;
@@ -369,7 +377,7 @@ async fetchRecentChats() {
             result[key]=item;
           }
         }
-
+          
           const read1 = ref(db,`${this.strategy.userChatsPath}/${this.store.state.user.email.replace(/\./g, ',')}/${chatId}`);
            await update(read1,{unread:0,lastProcessedTime:Date.now(),lastReadTime:Date.now()});
 
