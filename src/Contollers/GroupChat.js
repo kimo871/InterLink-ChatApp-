@@ -47,21 +47,13 @@ class GroupChatController {
            Object.values(answer.val()).forEach(async(item)=>{
                res[item.chatId] = {unread:0,lastProcessedTime:0,lastReadTime:0}
            })
-
            await set(userChat,res);
-
         }
     }
 
     // =============================================================================================
 
-    async getChatById(key) {
-        const chat = this.chats[key];
-        if (chat) {
-            return chat.getData();
-        }
-        return null;
-    }
+   
 
     async updateChat(key, data) {
         const chat = this.chats[key];
@@ -75,28 +67,6 @@ class GroupChatController {
 
     generateKey(chatId, participants) {
         return `${chatId}_${participants[0].replace(/\./g, ',')}_${participants[1].replace(/\./g, ',')}`;
-    }
-
-    async getAllChats() {
-        const allChatsData = [];
-        for (const key in this.chats) {
-            const chatData = await this.chats[key].getData();
-            allChatsData.push(chatData);
-        }
-        return allChatsData;
-    }
-
-    async deleteChat(key) {
-        const chat = this.chats[key];
-        if (chat) {
-            const chatRef1 = ref(db, `userChats/${chat.participants[0].replace(/\./g, ',')}/${key}`);
-            const chatRef2 = ref(db, `userChats/${chat.participants[1].replace(/\./g, ',')}/${key}`);
-            await set(chatRef1, null);
-            await set(chatRef2, null);
-            delete this.chats[key];
-            return true;
-        }
-        return false;
     }
 
     async additionalDetails(answer,userEmail){

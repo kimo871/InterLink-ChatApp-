@@ -54,7 +54,7 @@ watch(
       setTimeout(() => {
       
         state.value.feedback = { status: null, msg: '' };
-      }, 1000); 
+      }, 4000); 
     }
   },
   { deep: true } 

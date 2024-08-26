@@ -149,17 +149,6 @@ class DirectChatController {
   };
   //===================================================================================================
 
-    async getChatById(key) {
-        const chatRef = ref(db,`chats/${chatId}`);
-        const answer = await get(chatRef);
-        if (chat) {
-            return chat.getData();
-        }
-        return null;
-    }
-
-
-
    async sendMessage(msg,chatId=null){
     
         console.log("here.......",msg)
@@ -189,29 +178,6 @@ class DirectChatController {
             this.store.state.recentChats= [...chatDetails];
           }
       }
-
-
-    async getAllChats() {
-        const allChatsData = [];
-        for (const key in this.chats) {
-            const chatData = await this.chats[key].getData();
-            allChatsData.push(chatData);
-        }
-        return allChatsData;
-    }
-
-    async deleteChat(key) {
-        const chat = this.chats[key];
-        if (chat) {
-            const chatRef1 = ref(db, `userChats/${chat.participants[0].replace(/\./g, ',')}/${key}`);
-            const chatRef2 = ref(db, `userChats/${chat.participants[1].replace(/\./g, ',')}/${key}`);
-            await set(chatRef1, null);
-            await set(chatRef2, null);
-            delete this.chats[key];
-            return true;
-        }
-        return false;
-    }
 
     async createChat(email,email1){
       try{

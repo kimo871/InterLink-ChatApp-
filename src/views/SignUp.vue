@@ -41,6 +41,13 @@ const handleImageUpload = (e) => {
   }
 }
 
+
+ function disableActions(event) {
+      event.target.oncopy = event => event.preventDefault();
+      event.target.onpaste = event => event.preventDefault();
+      event.target.oncontextmenu = event => event.preventDefault();
+    }
+
 const removeImage = (e) => {
   e.target.parentElement.parentElement.previousSibling.value = ''
   console.log(e.target.parentElement.parentElement.previousSibling.files[0])
@@ -114,7 +121,7 @@ const handleSubmit = (e) => {
     <img width="200" src="./logo.png" alt="..." />
     <div class="brand_container">
       <h2>Sign up</h2>
-      <p class="slogan">Get your Chatvia account now.</p>
+      <p class="slogan">Get your Interlink account now.</p>
     </div>
 
     <Form :handleSubmit="handleSubmit" :feedback="store.state.feedback">
@@ -174,7 +181,7 @@ const handleSubmit = (e) => {
           ><input
             type="password"
             autocomplete="off"
-            @change="()=&gt; console.log('dd')"
+            @focus="disableActions"
             placeholder="Enter your password..."
             name="password"
           />
@@ -185,7 +192,7 @@ const handleSubmit = (e) => {
         <div class="input-wrapper">
           <input type="submit" value="Submit" />
         </div>
-        <p>By registering you agree to the Chatvia <a>Terms of Use</a></p>
+        <p>By registering you agree to the Interlink <a>Terms of Use</a></p>
       </div>
     </Form>
 

@@ -3,15 +3,14 @@ import { RouterLink, RouterView } from 'vue-router'
 import DashBoard from './views/DashBoard.vue'
 import { provide, onMounted } from 'vue'
 import { useStore } from './stores/store'
-import { auth } from './firebase/firebaseConfig'
+import { auth , messaging } from './firebase/firebaseConfig'
 import { onAuthStateChanged } from 'firebase/auth'
+import { getToken} from "firebase/messaging";
 import GroupChat from './models/GroupChat'
 const store = useStore()
 
 onMounted(() => {
-
-  console.log(store)
-  
+    
 let chat = new GroupChat(store);
 
   // Set up the auth state listener

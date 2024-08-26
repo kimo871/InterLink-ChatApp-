@@ -153,68 +153,148 @@ addChatListener(chatId) {
 
 
 
+// async listenRecentMessages(chatId, messageSnapshot, chatDetails) {
+//     // Flag to indicate that updates are in progress
+//     this.store.state.isUpdating = true;
+//     console.log("message added");
+//     const messages = messageSnapshot.val();
+//     console.log(messages);
+    
+//     // Find the index of the chat in chatDetails array
+//     const existingChatIndex = chatDetails.findIndex(chat => chat.chatDetails.chatId == chatId);
+//     console.log(existingChatIndex);
+    
+//     if (existingChatIndex !== -1) {
+//         const chat = chatDetails[existingChatIndex];
+//         const lastProcessedTime = chat.userDetails.lastProcessedTime || 0;
+//         const newMessages = Object.values(messages).filter(message => message.time > lastProcessedTime);
+
+//         if (newMessages.length > 0) {
+//             console.log("New messages detected:", newMessages);
+//             const latestMessage = newMessages[newMessages.length - 1];
+            
+//             chatDetails[existingChatIndex].chatDetails.lastMessage = latestMessage.message;
+//             chatDetails[existingChatIndex].chatDetails.lastTime = latestMessage.time;
+
+//             const userEmail = this.store.state.user.email.replace(/\./g, ',');
+//             console.log(this.store.state.openedChat?.chatId,chatId)
+//             if (this.store.state.openedChat?.chatId !== chatId) {
+//                 console.log(chatDetails[existingChatIndex].userDetails.unread,newMessages.length)
+//                 // Update unread count by the number of new messages if the chat is not open
+//                 chatDetails[existingChatIndex].userDetails.unread = (this.store.state.recentChats[existingChatIndex].userDetails.unread || 0) + newMessages.length;
+//             } else {
+//                 // Update the opened chat with new messages
+//                 this.store.state.openedChat.messages = messages;
+//                 // Reset unread count when the chat is open
+//                 chatDetails[existingChatIndex].userDetails.unread = 0;
+//                 // Update the last read time
+//                 chatDetails[existingChatIndex].userDetails.lastReadTime = latestMessage.time;
+//             }
+
+//             console.log('Updated unread count:', chatDetails[existingChatIndex].userDetails.unread);
+
+//             // Update the last processed message time
+//             chatDetails[existingChatIndex].userDetails.lastProcessedTime = latestMessage.time;
+            
+//             chatDetails.sort((a, b) => b.chatDetails.lastTime - a.chatDetails.lastTime);
+//             this.store.state.recentChats = [...chatDetails];
+            
+
+//             const readChat = ref(db, `${this.strategy.userChatsPath}/${userEmail}/${chatId}`);
+//             try {
+//                 await update(readChat, { 
+//                     unread: chatDetails[existingChatIndex].userDetails.unread, 
+//                     lastReadTime: chatDetails[existingChatIndex].userDetails.lastReadTime,
+//                     lastProcessedTime: chatDetails[existingChatIndex].userDetails.lastProcessedTime
+//                 });
+//                 console.log(`Updated unread count for chatId ${chatId} to ${chatDetails[existingChatIndex].userDetails.unread}`);
+//             } catch (error) {
+//                 console.error(`Failed to update unread count for chatId ${chatId}:`, error);
+//             }
+//         }
+//     }
+    
+//     // Reset the updating flag
+//     this.store.state.isUpdating = false;
+// }
+
+
 async listenRecentMessages(chatId, messageSnapshot, chatDetails) {
-    // Flag to indicate that updates are in progress
     this.store.state.isUpdating = true;
-    console.log("message added");
+    console.log("Message added");
+
     const messages = messageSnapshot.val();
-    console.log(messages);
-    
-    // Find the index of the chat in chatDetails array
-    const existingChatIndex = chatDetails.findIndex(chat => chat.chatDetails.chatId == chatId);
-    console.log(existingChatIndex);
-    
+    console.log(messages)
+    console.log("Received messages:", messages);
+
+    const existingChatIndex = chatDetails.findIndex(chat => chat.chatDetails.chatId === chatId);
+    console.log("Existing chat index:", existingChatIndex);
+
     if (existingChatIndex !== -1) {
-        const chat = chatDetails[existingChatIndex];
+        const chat = { ...chatDetails[existingChatIndex] }; // Create a shallow copy
         const lastProcessedTime = chat.userDetails.lastProcessedTime || 0;
+
         const newMessages = Object.values(messages).filter(message => message.time > lastProcessedTime);
+        console.log("New messages:", newMessages);
 
         if (newMessages.length > 0) {
-            console.log("New messages detected:", newMessages);
             const latestMessage = newMessages[newMessages.length - 1];
-            
-            chatDetails[existingChatIndex].chatDetails.lastMessage = latestMessage.message;
-            chatDetails[existingChatIndex].chatDetails.lastTime = latestMessage.time;
+
+            // Update chatDetails with immutable patterns
+            chat.chatDetails = {
+                ...chat.chatDetails,
+                lastMessage: latestMessage.message,
+                lastTime: latestMessage.time,
+            };
 
             const userEmail = this.store.state.user.email.replace(/\./g, ',');
-            console.log(this.store.state.openedChat?.chatId,chatId)
+
             if (this.store.state.openedChat?.chatId !== chatId) {
-                console.log(chatDetails[existingChatIndex].userDetails.unread,newMessages.length)
-                // Update unread count by the number of new messages if the chat is not open
-                chatDetails[existingChatIndex].userDetails.unread = (this.store.state.recentChats[existingChatIndex].userDetails.unread || 0) + newMessages.length;
+                const previousUnread = chat.userDetails.unread || 0;
+                chat.userDetails = {
+                    ...chat.userDetails,
+                    unread: previousUnread + newMessages.length,
+                };
             } else {
-                // Update the opened chat with new messages
-                this.store.state.openedChat.messages = messages;
-                // Reset unread count when the chat is open
-                chatDetails[existingChatIndex].userDetails.unread = 0;
-                // Update the last read time
-                chatDetails[existingChatIndex].userDetails.lastReadTime = latestMessage.time;
+                this.store.state.openedChat = {
+                    ...this.store.state.openedChat,
+                    messages: { ...messages },
+                };
+                chat.userDetails = {
+                    ...chat.userDetails,
+                    unread: 0,
+                    lastReadTime: latestMessage.time,
+                };
             }
 
-            // Update the last processed message time
-            chatDetails[existingChatIndex].userDetails.lastProcessedTime = latestMessage.time;
-            
-            chatDetails.sort((a, b) => b.chatDetails.lastTime - a.chatDetails.lastTime);
-            this.store.state.recentChats = [...chatDetails];
-            
+            chat.userDetails.lastProcessedTime = latestMessage.time;
 
-            const readChat = ref(db, `${this.strategy.userChatsPath}/${userEmail}/${chatId}`);
+            // Update chatDetails array immutably
+            const updatedChatDetails = [
+                chat,
+                ...chatDetails.filter((_, index) => index !== existingChatIndex),
+            ].sort((a, b) => b.chatDetails.lastTime - a.chatDetails.lastTime);
+
+            this.store.state.recentChats = [...updatedChatDetails];
+
+            // Persist changes to the database
+            const readChatRef = ref(db, `${this.strategy.userChatsPath}/${userEmail}/${chatId}`);
             try {
-                await update(readChat, { 
-                    unread: chatDetails[existingChatIndex].userDetails.unread, 
-                    lastReadTime: chatDetails[existingChatIndex].userDetails.lastReadTime,
-                    lastProcessedTime: chatDetails[existingChatIndex].userDetails.lastProcessedTime
+                await update(readChatRef, {
+                    unread: chat.userDetails.unread,
+                    lastReadTime: chat.userDetails.lastReadTime,
+                    lastProcessedTime: chat.userDetails.lastProcessedTime,
                 });
-                console.log(`Updated unread count for chatId ${chatId} to ${chatDetails[existingChatIndex].userDetails.unread}`);
+                console.log(`Updated chatId ${chatId} with unread count ${chat.userDetails.unread}`);
             } catch (error) {
-                console.error(`Failed to update unread count for chatId ${chatId}:`, error);
+                console.error(`Failed to update chatId ${chatId}:`, error);
             }
         }
     }
-    
-    // Reset the updating flag
+
     this.store.state.isUpdating = false;
 }
+
 
 async fetchRecentChats() {
     try {
