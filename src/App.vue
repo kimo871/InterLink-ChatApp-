@@ -10,7 +10,22 @@ import GroupChat from './models/GroupChat'
 const store = useStore()
 
 onMounted(() => {
-    
+  Notification.requestPermission().then((permission) => {
+  if (permission === "granted") {
+    getToken(messaging,{vapidKey:import.meta.env.VITE_APP_VAPID_KEY}).then((token)=> console.log(token)).catch((error) => {
+      if (error.code === 'messaging/permission-blocked') {
+        console.error("Notifications are blocked.");
+        alert("Please enable notifications in your browser settings.");
+      } else {
+        console.error("Failed to get the token:", error);
+      }
+    });
+  } else {
+    console.error("Notification permission not granted.");
+  }
+});
+
+  
 let chat = new GroupChat(store);
 
   // Set up the auth state listener
