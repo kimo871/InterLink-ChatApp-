@@ -1,29 +1,39 @@
 <script setup>
 import { RouterLink, RouterView } from 'vue-router'
 import DashBoard from './views/DashBoard.vue'
-import { provide, onMounted } from 'vue'
+import { provide, onMounted  , ref} from 'vue'
 import { useStore } from './stores/store'
 import { auth , messaging } from './firebase/firebaseConfig'
 import { onAuthStateChanged } from 'firebase/auth'
-import { getToken} from "firebase/messaging";
+import { getToken , onMessage} from "firebase/messaging";
 import GroupChat from './models/GroupChat'
 const store = useStore()
 
+let token2 = ref("")
+
 onMounted(() => {
+
   Notification.requestPermission().then((permission) => {
-  if (permission === "granted") {
-    getToken(messaging,{vapidKey:import.meta.env.VITE_APP_VAPID_KEY}).then((token)=> console.log(token)).catch((error) => {
-      if (error.code === 'messaging/permission-blocked') {
-        console.error("Notifications are blocked.");
-        alert("Please enable notifications in your browser settings.");
-      } else {
-        console.error("Failed to get the token:", error);
-      }
-    });
-  } else {
-    console.error("Notification permission not granted.");
-  }
-});
+    if (permission === "granted") {
+      getToken(messaging, { vapidKey: import.meta.env.VITE_APP_VAPID_KEY })
+        .then((token) => {
+          console.log('FCM Token:', token);
+          token2 = token;
+        })
+        .catch((error) => {
+          console.error("Failed to get the token:", error);
+        });
+    } else {
+      console.error("Notification permission not granted.");
+    }
+  });
+
+  // Handle messages when the app is in the foreground
+  onMessage(messaging, (payload) => {
+    console.log('Message received in foreground: ', payload);
+    // Update the UI or show a notification
+  });
+
 
   
 let chat = new GroupChat(store);
@@ -45,7 +55,9 @@ provide('storeProvider', store)
 </script>
 
 <template lang="pug">
-RouterView
+div
+ p {{ token2 }}
+ RouterView
 </template>
 
 <style lang="scss">

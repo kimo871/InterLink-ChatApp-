@@ -20,4 +20,33 @@ firebase.initializeApp({
 
 // Retrieve an instance of Firebase Messaging so that it can handle background
 // messages.
+
+self.addEventListener('push', event => {
+  const options = {
+    body: 'Test notification body',
+    icon: 'path/to/icon.png',
+  };
+  event.waitUntil(
+    self.registration.showNotification('Test Notification', options)
+  );
+});
+
 const messaging = firebase.messaging();
+
+messaging.onBackgroundMessage((payload) => {
+  console.log('Received background message: ', payload);
+  
+  const notificationTitle = payload.notification.title;
+  const notificationOptions = {
+    body: payload.notification.body,
+    icon: payload.notification.icon,
+  };
+
+  // Show the notification with the correct options
+  self.registration.showNotification(notificationTitle, notificationOptions)
+    .catch((err) => {
+      console.error('Failed to show notification:', err);
+    });
+});
+
+
