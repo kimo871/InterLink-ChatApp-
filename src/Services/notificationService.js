@@ -44,7 +44,8 @@ export const sendNotification = async(deviceToken,sender,msg)=>{
         await fetch("https://firebase-messaging-service.vercel.app/api/sendNotification",{
             method:"POST",
             headers: {
-              'Content-Type': 'application/json'
+              'Content-Type': 'application/json',
+              "Access-Control-Allow-Origin":"*"
             },
             body:JSON.stringify({
                 title:`${sender} Messaged you.....`,
@@ -59,8 +60,6 @@ export const sendNotification = async(deviceToken,sender,msg)=>{
         .catch((error) => {
         console.log('Error sending message:', error);
         });
-        console.log('Message sent successfully:', data);
-        console.log(response)
     }
     catch(err){
         console.log(err);
