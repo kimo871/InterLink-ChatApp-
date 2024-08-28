@@ -21,32 +21,34 @@ firebase.initializeApp({
 // Retrieve an instance of Firebase Messaging so that it can handle background
 // messages.
 
-self.addEventListener('push', event => {
-  const options = {
-    body: 'Test notification body',
-    icon: 'path/to/icon.png',
+// Handle background messages
+self.addEventListener('push', (event) => {
+  const payload = event.data ? event.data.json() : {};
+  
+  console.log('Received push event: ', payload);
+
+  const notificationTitle = payload.notification?.title || 'Default Title';
+  const notificationOptions = {
+    body: payload.notification?.body || 'Default body text',
+    icon:  'https://i.ibb.co/pr75xQS/logo2.png',
   };
+
+    // Show the notification
+    const showNotificationPromise = self.registration.showNotification(notificationTitle, notificationOptions)
+      .catch((err) => {
+        console.error('Failed to show notification:', err);
+      });
+
+    // Ensure that the service worker waits until the notification is shown
+    event.waitUntil(showNotificationPromise);
+});
+
+// Optional: Handle notification click events
+self.addEventListener('notificationclick', (event) => {
+  event.notification.close(); // Close the notification when clicked
+
+  // Handle the click event, e.g., open a URL or focus on the app
   event.waitUntil(
-    self.registration.showNotification('Test Notification', options)
+    clients.openWindow('/') // Replace with your app's URL
   );
 });
-
-const messaging = firebase.messaging();
-
-messaging.onBackgroundMessage((payload) => {
-  console.log('Received background message: ', payload);
-  
-  const notificationTitle = payload.notification.title;
-  const notificationOptions = {
-    body: payload.notification.body,
-    icon: payload.notification.icon,
-  };
-
-  // Show the notification with the correct options
-  self.registration.showNotification(notificationTitle, notificationOptions)
-    .catch((err) => {
-      console.error('Failed to show notification:', err);
-    });
-});
-
-

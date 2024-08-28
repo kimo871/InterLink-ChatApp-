@@ -13,20 +13,6 @@ let token2 = ref("")
 
 onMounted(() => {
 
-  Notification.requestPermission().then((permission) => {
-    if (permission === "granted") {
-      getToken(messaging, { vapidKey: import.meta.env.VITE_APP_VAPID_KEY })
-        .then((token) => {
-          console.log('FCM Token:', token);
-          token2 = token;
-        })
-        .catch((error) => {
-          console.error("Failed to get the token:", error);
-        });
-    } else {
-      console.error("Notification permission not granted.");
-    }
-  });
 
   // Handle messages when the app is in the foreground
   onMessage(messaging, (payload) => {
@@ -55,9 +41,7 @@ provide('storeProvider', store)
 </script>
 
 <template lang="pug">
-div
- p {{ token2 }}
- RouterView
+RouterView
 </template>
 
 <style lang="scss">

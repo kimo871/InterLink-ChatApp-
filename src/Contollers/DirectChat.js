@@ -5,6 +5,7 @@ import {auth,db} from "../firebase/firebaseConfig"
 import {getStorage,ref as storageRef,uploadBytes,getDownloadURL } from "firebase/storage"
 import { ref , set , get , child , push,update,onValue,onChildChanged,off} from 'firebase/database';
 import { debounce } from 'lodash';
+import { sendNotification } from '@/Services/notificationService';
 class DirectChatController {
     constructor(store) {
         this.store = store;
@@ -33,7 +34,7 @@ class DirectChatController {
           if (userSnapshot.exists()) {
             const userDetails = userSnapshot.val();
             console.log(userDetails)
-            return {name:userDetails.name,photoURL:userDetails.photoURL,email:userDetails.email}
+            return {name:userDetails.name,photoURL:userDetails.photoURL,email:userDetails.email,deviceToken:userDetails?.deviceToken}
            }
        }
        return null;
@@ -60,7 +61,7 @@ class DirectChatController {
         const user = snapshot.val();
         let result = await this.checkChat(this.store.state.user.email,userEmail);
         if(result){
-          this.getMessages(result);
+          this.getMessages(result,{...user});
         }
         else{
           
@@ -108,6 +109,8 @@ class DirectChatController {
         } 
 
         await this.basic.createMessage(answer,msg);
+
+        await sendNotification(this.store.state.openedChat.userData.deviceToken,this.store.state.openedChat.userData.name,msg)
 
       }
       catch(err){
@@ -163,6 +166,8 @@ class DirectChatController {
             } 
       
             await this.basic.createMessage(answer,msg);
+
+            await sendNotification(this.store.state.openedChat.userData.deviceToken,msg)
       
           }
           catch(err){

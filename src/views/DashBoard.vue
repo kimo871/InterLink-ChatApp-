@@ -3,7 +3,16 @@ import NavBar from '../components/NavBar.vue'
 import SideBar from '../components/SideBar.vue'
 import ChatRoom from '../components/ChatRoom.vue'
 import Modal from '@/components/Modal.vue'
-import { ref } from 'vue'
+import { requestNotificationPermission , saveToken } from '@/Services/notificationService'
+import { ref , onMounted , inject } from 'vue'
+
+const store = inject("storeProvider",{})
+
+onMounted(async()=>{
+  const token = await requestNotificationPermission();
+  if(token!=null) await saveToken(store.state.user.email.replace(/\./g, ','),token);
+})
+
 let chatsSearch = () => console.log('chats')
 
 let groupsSearch = () => console.log('groups')

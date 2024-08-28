@@ -13,6 +13,7 @@
   },
   "dependencies": {
     "firebase": "^10.12.4",
+    "firebase-admin": "^12.4.0",
     "loadash": "^1.0.0",
     "pinia": "^2.1.7",
     "vue": "^3.4.29",

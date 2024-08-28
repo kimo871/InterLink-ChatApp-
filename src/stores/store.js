@@ -7,6 +7,7 @@ import { ref , set , get , child , push,update,onValue,onChildChanged,off} from 
 import { debounce } from 'lodash';
 import GroupChat from '../models/GroupChat.js'
 import ChatController from '@/Contollers/Chat';
+import { requestNotificationPermission } from '@/Services/notificationService';
 export const useStore = defineStore('store', () => {
   
   let state = useState({
