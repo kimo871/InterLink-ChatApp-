@@ -55,7 +55,7 @@ div.message(@click="(e)=>{showEmojis = !showEmojis}" :class="{ 'receiver-msg': s
     div.message-content
       i(v-if="type=='file'" class='fa-solid fa-file')
       p(v-else) {{ message }}
-      a(v-if="type=='file'"  :href="download" :download="downloadName") {{"download"}}
+      a(v-if="type=='file'"  :href="download" target="_blank" :download="downloadName") {{"download"}}
      
     div.message-status
       p {{ getTime(time)[0] }}:{{ getTime(time)[1] }}
