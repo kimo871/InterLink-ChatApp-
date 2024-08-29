@@ -169,7 +169,7 @@ class DirectChatController {
       
             await this.basic.createMessage(answer,msg);
 
-            await sendNotification(this.store.state.openedChat.userData.deviceToken,this.store.state.openedChat.userData.name,msg)
+            await sendNotification(this.store.state.openedChat.userData.deviceToken,this.store.state.user.displayName,msg)
       
           }
           catch(err){
