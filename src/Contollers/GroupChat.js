@@ -4,6 +4,7 @@ import {auth,db,store} from "../firebase/firebaseConfig"
 import {getStorage,ref as storageRef,uploadBytes,getDownloadURL } from "firebase/storage"
 import { ref , set , get , child , push,update,onValue,onChildChanged,off} from 'firebase/database';
 import { debounce } from 'lodash';
+import groupIcon from '../assets/icons/group.png';
 
 class GroupChatController {
     constructor(store) {
@@ -28,7 +29,7 @@ class GroupChatController {
           this.store.state.openedChat = obj;
 
           this.store.state.openedChat = {
-           userData : {name:this.model.name , photoURL:"../src/assets/icons/group.png"},
+           userData : {name:this.model.name , photoURL:groupIcon},
            messages:[],
            chatType:"groups",
            chatId:key,
@@ -70,7 +71,7 @@ class GroupChatController {
     }
 
     async additionalDetails(answer,userEmail){
-        return {name:answer.name , photoURL:"../src/assets/icons/group.png"};
+        return {name:answer.name , photoURL:groupIcon};
 }
 
 

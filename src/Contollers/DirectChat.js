@@ -155,19 +155,21 @@ class DirectChatController {
    async sendMessage(msg,chatId=null){
     
         console.log("here.......",msg)
+        console.log(this.store.state.openedChat.userData.email.replace(/,/g, '.'))
         
           try{
-            let answer = await this.checkChat(this.store.state.user.email,this.store.state.openedChat.userData.email);
-      
-            console.log(answer)
+            let answer = await this.checkChat(this.store.state.user.email,this.store.state.openedChat.userData.email.replace(/,/g, '.'));
+    
       
             if(!answer){
-            answer = await this.createChat(this.store.state.user.email,this.store.state.openedChat.userData.email);
+            answer = await this.createChat(this.store.state.user.email,this.store.state.openedChat.userData.email.replace(/,/g, '.'));
             } 
+
+            console.log(answer)
       
             await this.basic.createMessage(answer,msg);
 
-            await sendNotification(this.store.state.openedChat.userData.deviceToken,msg)
+            await sendNotification(this.store.state.openedChat.userData.deviceToken,this.store.state.openedChat.userData.name,msg)
       
           }
           catch(err){
@@ -207,22 +209,24 @@ class DirectChatController {
   
         const userChatRef2 = ref(db,`userChats/${email1.replace(/\./g, ',')}`);
 
-        const answer = await get(userChatRef2)
-  
-        await update(userChatRef2,{
-          [key] : {unread:0}
-        })
+        
 
+        const answer = await get(userChatRef2)
+
+          await update(userChatRef2,{
+            [key] : {unread:0}
+          })
+        
+  
         let obj = {...this.store.state.openedChat};
 
           obj.chatId = key;
           obj.chatType="chats";
 
-          console.log(answer.val())
+          //console.log(answer.val())
 
           this.store.state.openedChat = {
-           userData : {name:answer.val().name , email:answer.val().email,photoURL:answer.val().photoURL },
-           messages:[],
+           ...this.store.state.openedChat,
            chatType:"chats",
            chatId:key,
         }
@@ -238,6 +242,7 @@ class DirectChatController {
 
     async checkChat(email,email1){
         try{
+          console.log(email.replace(/\./g, ','),email1.replace(/\./g, ','))
             let chatRef1 = ref(db,`userChats/${email.replace(/\./g, ',')}`)
     
             let chatRef2 = ref(db,`userChats/${email1.replace(/\./g, ',')}`)

@@ -68,63 +68,7 @@ class ChatController {
     }
 
 
-  //   async listenRecentMessages(chatId, messageSnapshot, chatDetails) {
-  //     console.log("message added");
-  //     const messages = messageSnapshot.val();
-  //     console.log(messages);
-  
-  //     // If the chat is currently opened, update its messages
-  //     if (this.store.state.openedChat?.chatId === chatId) {
-  //         console.log("Updating opened chat messages");
-  //         this.store.state.openedChat.messages = messages;
-  //     }
-  
-  //     // Find the latest message
-  //     const lastMessage = Object.values(messages)[Object.keys(messages).length - 1];
-  //     console.log(lastMessage, "latest message");
-  
-  //     // Find the chat in the chatDetails array
-  //     const existingChatIndex = chatDetails.findIndex(chat => chat.chatDetails.chatId === chatId);
-  //     console.log(existingChatIndex);
-  
-  //     if (existingChatIndex !== -1) {
-  //         const chat = chatDetails[existingChatIndex];
-  //         const lastProcessedTime = chat.chatDetails.lastTime || 0;
-  
-  //         // Only update if the message is new
-  //         if (lastMessage.time > lastProcessedTime) {
-  //             const newMessages = Object.values(messages).filter(message => message.time > lastProcessedTime);
-  //             console.log("New messages detected");
-  
-  //             // Update the chat details with the latest message and time
-  //             chatDetails[existingChatIndex].chatDetails.lastMessage = lastMessage.message;
-  //             chatDetails[existingChatIndex].chatDetails.lastTime = lastMessage.time;
-  
-  //             const userEmail = this.store.state.user.email.replace(/\./g, ',');
-  
-  //             // Adjust the unread count
-  //             if (this.store.state.openedChat?.chatId !== chatId) {
-  //                 // If the chat is not opened, increase unread count by the number of new messages
-  //                 chatDetails[existingChatIndex].userDetails.unread = (chatDetails[existingChatIndex].userDetails.unread || 0) + newMessages.length;
-  //             } else {
-  //                 // If the chat is opened, reset the unread count
-  //                 chatDetails[existingChatIndex].userDetails.unread = 0;
-  //             }
-  
-  //             // Update the unread count and last message times in the database
-  //             const readChat = ref(db, `${this.userChatsPath}/${userEmail}/${chatId}`);
-  //             await update(readChat, {
-  //                 unread: chatDetails[existingChatIndex].userDetails.unread,
-  //                 lastProcessedTime: lastMessage.time
-  //             });
-  
-  //             // Sort the recent chats based on the last message time
-  //             chatDetails.sort((a, b) => b.chatDetails.lastTime - a.chatDetails.lastTime);
-  //             this.store.state.recentChats = [...chatDetails];
-  //             console.log(`Updated unread count for chatId ${chatId} to ${chatDetails[existingChatIndex].userDetails.unread}`);
-  //         }
-  //     }
-  // }
+ 
 
   
 // =======================================================================================================
@@ -153,71 +97,6 @@ addChatListener(chatId) {
 
 
 
-// async listenRecentMessages(chatId, messageSnapshot, chatDetails) {
-//     // Flag to indicate that updates are in progress
-//     this.store.state.isUpdating = true;
-//     console.log("message added");
-//     const messages = messageSnapshot.val();
-//     console.log(messages);
-    
-//     // Find the index of the chat in chatDetails array
-//     const existingChatIndex = chatDetails.findIndex(chat => chat.chatDetails.chatId == chatId);
-//     console.log(existingChatIndex);
-    
-//     if (existingChatIndex !== -1) {
-//         const chat = chatDetails[existingChatIndex];
-//         const lastProcessedTime = chat.userDetails.lastProcessedTime || 0;
-//         const newMessages = Object.values(messages).filter(message => message.time > lastProcessedTime);
-
-//         if (newMessages.length > 0) {
-//             console.log("New messages detected:", newMessages);
-//             const latestMessage = newMessages[newMessages.length - 1];
-            
-//             chatDetails[existingChatIndex].chatDetails.lastMessage = latestMessage.message;
-//             chatDetails[existingChatIndex].chatDetails.lastTime = latestMessage.time;
-
-//             const userEmail = this.store.state.user.email.replace(/\./g, ',');
-//             console.log(this.store.state.openedChat?.chatId,chatId)
-//             if (this.store.state.openedChat?.chatId !== chatId) {
-//                 console.log(chatDetails[existingChatIndex].userDetails.unread,newMessages.length)
-//                 // Update unread count by the number of new messages if the chat is not open
-//                 chatDetails[existingChatIndex].userDetails.unread = (this.store.state.recentChats[existingChatIndex].userDetails.unread || 0) + newMessages.length;
-//             } else {
-//                 // Update the opened chat with new messages
-//                 this.store.state.openedChat.messages = messages;
-//                 // Reset unread count when the chat is open
-//                 chatDetails[existingChatIndex].userDetails.unread = 0;
-//                 // Update the last read time
-//                 chatDetails[existingChatIndex].userDetails.lastReadTime = latestMessage.time;
-//             }
-
-//             console.log('Updated unread count:', chatDetails[existingChatIndex].userDetails.unread);
-
-//             // Update the last processed message time
-//             chatDetails[existingChatIndex].userDetails.lastProcessedTime = latestMessage.time;
-            
-//             chatDetails.sort((a, b) => b.chatDetails.lastTime - a.chatDetails.lastTime);
-//             this.store.state.recentChats = [...chatDetails];
-            
-
-//             const readChat = ref(db, `${this.strategy.userChatsPath}/${userEmail}/${chatId}`);
-//             try {
-//                 await update(readChat, { 
-//                     unread: chatDetails[existingChatIndex].userDetails.unread, 
-//                     lastReadTime: chatDetails[existingChatIndex].userDetails.lastReadTime,
-//                     lastProcessedTime: chatDetails[existingChatIndex].userDetails.lastProcessedTime
-//                 });
-//                 console.log(`Updated unread count for chatId ${chatId} to ${chatDetails[existingChatIndex].userDetails.unread}`);
-//             } catch (error) {
-//                 console.error(`Failed to update unread count for chatId ${chatId}:`, error);
-//             }
-//         }
-//     }
-    
-//     // Reset the updating flag
-//     this.store.state.isUpdating = false;
-// }
-
 
 async listenRecentMessages(chatId, messageSnapshot, chatDetails) {
     this.store.state.isUpdating = true;
@@ -234,7 +113,7 @@ async listenRecentMessages(chatId, messageSnapshot, chatDetails) {
         const chat = { ...chatDetails[existingChatIndex] }; // Create a shallow copy
         const lastProcessedTime = chat.userDetails.lastProcessedTime || 0;
 
-        const newMessages = Object.values(messages).filter(message => message.time > lastProcessedTime);
+        const newMessages = (messages)!=null ?  Object.values(messages).filter(message => message.time > lastProcessedTime) : [];
         console.log("New messages:", newMessages);
 
         if (newMessages.length > 0) {
@@ -397,7 +276,7 @@ async fetchRecentChats() {
           let result = msg;
 
           if(msg.type){
-            result = await uploadFile("files",msg);
+            result = await this.store.uploadFile("files",msg);
             
             console.log("upload url...",result)
           }
@@ -415,7 +294,7 @@ async fetchRecentChats() {
             id : newMsgRef.key,
             message : msg.type ? "Sent A file" : msg ,
             type : msg.type ?  "file" : "text",
-            download : result.replace(domain,""),
+            download : result,
             downloadName : msg.type ? msg.name : null,
             time : Date.now(),
             readBy:null,
@@ -504,6 +383,8 @@ async fetchRecentChats() {
         console.log(err);
       }
     }
+
+    
 }
 
 export default ChatController;
