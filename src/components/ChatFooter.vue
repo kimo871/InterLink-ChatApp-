@@ -4,7 +4,8 @@ import emoji from '../assets/icons/emoji.svg'
 import fileShare from '../assets/icons/fileShare.svg'
 import sendButton from '../assets/icons/sendButton.svg'
 import Emojis from './Emojis.vue';
-import { ref , inject } from 'vue';
+import { ref , inject , watch } from 'vue';
+
 
 let store = inject("storeProvider",{});
 
@@ -16,6 +17,19 @@ let file = ref({
   status:false,
   content:null,
 })
+
+let element =  ref(null);
+
+watch(
+  () => file,
+  (newMsg) => {
+    if (newMsg) {
+      console.log(file.value,"mode");
+    }
+  },
+  { deep: true } 
+);
+
 
 
 let showEmojis = ref(false)
@@ -37,7 +51,7 @@ const sendMessage = async()=>{
     console.log(err);
   }
   inputValue.value="";
-  file.value = {status:null,content:null}
+  file.value = {status:false,content:null}
 }
 
 const sendOption = ()=>{
@@ -64,12 +78,13 @@ let clickEmoji = (emoji)=>{
 const handleFile = (e)=>{
   inputValue.value = "";
   console.log(e.target.files[0])
-  if(!validateSizeFile(e.target.files[0])) return alert(" Max File Size is 30 kb ! ")
+  if(!validateSizeFile(e.target.files[0])) return alert(" Max File Size is 3000 kb ! ")
   file.value = {status:true,content:e.target.files[0]};
+  e.target.value = "";
 }
 
 const validateSizeFile = (file)=>{
-   return  file.size/1024 <= 30
+   return  file.size/1024 <= 3000
 }
 
 </script>
@@ -80,7 +95,7 @@ div.chat-footer
      i(class="fa-solid fa-file")
      p {{ file.content.name }}
      .reset-wrapper 
-      i(@click="()=>file={status:false,fileName:null}" class="fa-solid fa-circle-xmark")
+      i(@click="()=>file={status:false,content:null}" class="fa-solid fa-circle-xmark")
     img(v-if="!file.status" :src="emoji" @click="()=>{showEmojis = !showEmojis}") 
     Emojis(v-if="showEmojis"  fontSize="30" :click="clickEmoji"  :emojis="emojis")
   
