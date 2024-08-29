@@ -45,7 +45,6 @@ export const sendNotification = async(deviceToken,sender,msg)=>{
             method:"POST",
             headers: {
               'Content-Type': 'application/json',
-              "Access-Control-Allow-Origin":"*"
             },
             body:JSON.stringify({
                 title:`${sender} Messaged you.....`,
